@@ -2,7 +2,7 @@ import structs/HashMap
 import View
 
 NEventHandler: abstract class {
-    fire: abstract func (sender: NView, eventName: String, data: HashMap<String, Object>)
+    fire: abstract func (sender: NView, event: String, data: HashMap<String, Object>)
 }
 
 NClosureEventHandler: abstract class {
@@ -10,7 +10,7 @@ NClosureEventHandler: abstract class {
     
     init: func (=_closure) {}
     
-    fire: func (sender: NView, eventName: String, data: HashMap<String, Object>) {
-        _closure(sender, eventName, data)
+    fire: func (sender: NView, event: String, data: HashMap<String, Object>) {
+        _closure(sender, event, data)
     }
 }
