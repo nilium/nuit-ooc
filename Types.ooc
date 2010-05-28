@@ -5,9 +5,9 @@ NFloat: cover from float extends Float {
 	/* these are here because I typically don't trust the SDK very much at all */
 	min: static extern(fminf) func (This, This) -> This
 	max: static extern(fmaxf) func (This, This) -> This
-	abs: static extern(fabsf) func (This) -> This
-	floor: static extern(floorf) func -> This
-	ceil: static extern(ceilf) func -> This
+	abs: extern(fabsf) func -> This
+	floor: extern(floorf) func -> This
+	ceil: extern(ceilf) func -> This
 	EPSILON: static const extern(FLT_EPSILON) This
 	
 	/* determines whether or not two NFloats are equal based
