@@ -357,6 +357,7 @@ NView: class {
         Clips rendering to a subview's frame
     */
     _clipSubview: func (subview: NView, renderer: NRenderer) {
+        /*
         cur_clip := renderer getScreenClip()
         
         bounds := this bounds()
@@ -364,5 +365,6 @@ NView: class {
         
         //renderer translate(bounds origin)
         //renderer translate(frame origin)
+        */
     }
 }
