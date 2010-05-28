@@ -295,11 +295,33 @@ NView: class {
         }
         return rv
     }
+
+//////// Working with view coordinates
     
     /**
-        Converts a point from the view's frame to screen (or whatever the
-        coordinates are in prior to being in a frame) coordinates and returns
-        the resulting point.
+        Converts a :param:`point` from a given :param:`view`'s coordinate
+        system to this view's and returns the result.
+        
+        :param: view The view to convert the point from.
+    */
+    convertPointFromView: func (point: NPoint, view: NView) -> NPoint {
+        convertPointFromScreen(view convertPointToScreen(point))
+    }
+    
+    /**
+        Converts a :param:`point` from this view's coordinate system to another
+        :param:`view`'s and returns the result.
+        
+        :param: view The view to convert the point to.
+    */
+    convertPointToView: func (point: NPoint, view: NView) -> NPoint {
+        convertPointToScreen(view convertPointFromScreen(point))
+    }
+    
+    /**
+        Converts a :param:`point` from the view's frame to screen (or whatever
+        the coordinates are in prior to being in a frame) coordinates and
+        returns the resulting point.
     */
     convertPointToScreen: func (point: NPoint) -> NPoint {
         point add(frame() origin)
@@ -313,8 +335,8 @@ NView: class {
     }
     
     /**
-        Converts a point from screen coordinates so that they are relative to the
-        view's frame.
+        Converts a :param:`point` from screen coordinates so that they are
+        relative to the view's frame.
     */
     convertPointFromScreen: func (point: NPoint) -> NPoint {
         point subtract(frame() origin)
@@ -328,10 +350,11 @@ NView: class {
     }
     
     /**
-        Returns a view at the point specified, including this view, or null if there
-        are no views in the view hierarchy that contain the point.
+        Returns a view at the :param:`point` specified, including this view,
+        or null if there are no views in the view hierarchy that contain the
+        point.
         
-        The point is assumed to be in the view's coordinate system.
+        The point is assumed to be in the view's coordinate system already.
     */
     viewForPoint: func (point: NPoint) -> NView {
         last := _subviews back()
