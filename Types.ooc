@@ -215,6 +215,24 @@ NRect: cover {
 		top() + height()
 	}
 	
+	setLeft: func@ (left: NFloat) {
+	    size width = right() - left
+	    origin x = left
+	}
+	
+	setRight: func@ (right: NFloat) {
+	    size width = right - left()
+	}
+	
+	setTop: func@ (top: NFloat) {
+	    size height = bottom() - top
+	    origin y = top
+	}
+	
+	setBottom: func@ (bottom: NFloat) {
+	    size height = bottom - top()
+	}
+	
 	contains: func (point: NPoint) -> Bool {
 		return (left() <= point x() && point x() <= right() && top() <= point y() && point y() <= bottom())
 	}
