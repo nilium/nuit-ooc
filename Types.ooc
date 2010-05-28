@@ -10,9 +10,11 @@ NFloat: cover from float extends Float {
 	ceil: extern(ceilf) func -> This
 	EPSILON: static const extern(FLT_EPSILON) This
 	
-	/* determines whether or not two NFloats are equal based
-	 * on whether or not their absolute difference is smaller
-	 * than the float epsilon
+	/**
+	    Determines whether or not two NFloats are equal based on whether or
+	    not their absolute difference is smaller than the float epsilon.
+	    
+	    This is not the same as NFloat==NFloat.
 	 */
 	equals: inline func(other: This) -> Bool {
 		(this-other < This EPSILON)
