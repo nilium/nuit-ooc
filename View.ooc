@@ -492,4 +492,129 @@ NView: class {
         //renderer translate(frame origin)
         */
     }
+
+//////// Events & event handling
+    
+    __pointToSuperview: final func (point: NPoint) -> NPoint {
+        if (_superview) point add(frame() origin) .add(_superview bounds() origin)
+        return point
+    }
+    
+    /** Forwards a mouse movement event to the view's superview */
+    forwardMouseMovedEvent: final func (mousePosition, mouseDelta: NPoint) {
+        if (_superview)
+            _superview mouseMoved(__pointToSuperview(mousePosition), mouseDelta)
+    }
+    
+    /** Forwards a mouse pressed event to the view's superview */
+    forwardMousePressedEvent: final func (button: Int, mousePosition: NPoint) {
+        if (_superview)
+            _superview mousePressed(button, __pointToSuperview(mousePosition))
+    }
+    
+    /** Forwards a mouse released event to the view's superview */
+    forwardMouseReleasedEvent: final func (button: Int, mousePosition: NPoint) {
+        if (_superview)
+            _superview mouseReleased(button, __pointToSuperview(mousePosition))
+    }
+    
+    /**
+        Called when the mouse has moved and this view is to receive the
+        movement event.
+        
+        :param: position The current position of the mouse *in the view's
+        coordinate space.*
+        
+        :param: delta The amount that the mouse has moved from its last
+        position.
+        
+        The default implementation passes the event on to its superview.  If
+        your implementation is not able to handle the event, you should call
+        the superclass's implementation or :meth:`forwardMouseMovedEvent` with
+        the event data.
+    */
+    mouseMoved: func (mousePosition, mouseDelta: NPoint) {
+        forwardMouseMovedEvent(mousePosition, mouseDelta)
+    }
+    
+    /**
+       Called when a mouse :param:`button` has been pressed and this view is to
+       receive the event.
+       
+       :param: button The button that was pressed.  The value for each button
+       is 1 for left, 2 for right, and 3 for middle mouse.  Other mouse buttons
+       are not defined but may still be received.
+        
+       :param: position The current position of the mouse *in the view's
+       coordinate space.*
+
+       The default implementation passes the event on to its superview.  If
+       your implementation is not able to handle the event, you should call
+       the superclass's implementation or :meth:`forwardMousePressedEvent`
+       with the event data.
+    */
+    mousePressed: func (button: Int, mousePosition: NPoint) {
+        forwardMousePressedEvent(button, mousePosition)
+    }
+    
+    /**
+       Called when a mouse :param:`button` has been released and this view is
+       to receive the event.
+       
+       :param: button The button that was released.  The value for each button
+       is 1 for left, 2 for right, and 3 for middle mouse.  Other mouse buttons
+       are not defined but may still be received.
+        
+       :param: position The current position of the mouse *in the view's
+       coordinate space.*
+
+       The default implementation passes the event on to its superview.  If
+       your implementation is not able to handle the event, you should call
+       the superclass's implementation or :meth:`forwardMouseReleasedEvent`
+       with the event data.
+    */
+    mouseReleased: func (button: Int, mousePosition: NPoint) {
+        forwardMouseReleasedEvent(button, mousePosition)
+    }
+    
+    /**
+        Called by an NView or subclass thereof when a custom event should be
+        fired for the view.  This sends the :param:`event` and the
+        corresponding event :param:`data` to all event handlers registered for
+        that event.
+        
+        :param: event The event name.
+        
+        :param: data A HashMap<String,Object> containing any data relevant to
+        the event.
+    */
+    _fireEvent: func (event: String, data: HashMap<String, Object>) {
+        handlers := _eventhandlers get(event) as LinkedList<NEventHandler>
+        if (handlers != null) {
+            iter := handlers front()
+            while (iter hasNext())
+                iter next() fire(this, event, data)
+        }
+    }
+    
+    addEventHandler: func (event: String, handler: NEventHandler) {
+        handlers := _eventhandlers get(event) as LinkedList<NEventHandler>
+        if (handlers == null) {
+            handlers = LinkedList<NEventHandler> new()
+            _eventhandlers put(event, handlers)
+        }
+        handlers add(handler)
+    }
+    
+    removeEventHandler: func (event: String, handler: NEventHandler) {
+        handlers := _eventhandlers get(event) as LinkedList<NEventHandler>
+        if (handlers != null)
+            handlers remove(handler)
+    }
+    
+    removeEventHandlers: func (event: String) {
+        handlers := _eventhandlers get(event) as LinkedList<NEventHandler>
+        if (handlers != null)
+            handlers clear()
+    }
 }
