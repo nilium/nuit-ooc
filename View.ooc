@@ -4,6 +4,25 @@ import Types
 import Renderer
 import EventHandler
 
+/**
+    Base class for all views in NUIT.
+    
+    Views
+    =====
+    brief overview of what exactly a view is
+    
+    View Hierarchy
+    ==============
+    brief overview of how the view hierarchy works
+    
+    Event Handling
+    ==============
+    explain how events are propagated/handled
+    
+    Drawing
+    =======
+    explain how to draw views
+*/
 NView: class {
     _name: String = ""
     _tag: Object = null
