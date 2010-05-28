@@ -32,17 +32,13 @@ NSize: cover {
 	}
 	
     min: static func (left, right: This) -> This {
-		r: This
-		r width = NFloat min(left width, right width)
-		r height = NFloat min(left height, right height)
-		return r
+		new(NFloat min(left width, right width),
+		    NFloat min(left height, right height))
 	}
 	
 	max: static func (left, right: This) -> This {
-		r: This
-		r width = NFloat max(left width, right width)
-		r height = NFloat max(left height, right height)
-		return r
+		new(NFloat max(left width, right width),
+		    NFloat max(left height, right height))
 	}
 	
 	add: func@ (other: This) {
@@ -99,17 +95,13 @@ NPoint: cover {
 	}
 	
 	min: static func (left, right: This) -> This {
-		r: This
-		r x = NFloat min(left x, right x)
-		r y = NFloat min(left y, right y)
-		return r
+		new(NFloat min(left x, right x),
+		    NFloat min(left y, right y))
 	}
 	
 	max: static func (left, right: This) -> This {
-		r: This
-		r x = NFloat max(left x, right x)
-		r y = NFloat max(left y, right y)
-		return r
+		new(NFloat max(left x, right x),
+		    NFloat max(left y, right y))
 	}
 	
 	add: func@ (other: This) {
