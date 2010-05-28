@@ -280,10 +280,10 @@ NView: class {
     subviewWasRemoved: func (subview: NView) {}
     
     /** Returns a LinkedList with all of the subviews of this view. */
-    subviews: func -> LinkedList<NView> { _subviews clone() }
+    subviews: final func -> LinkedList<NView> { _subviews clone() }
     
     /** Returns the view's superview */
-    superview: func -> NView { _superview }
+    superview: final func -> NView { _superview }
     
     /** Returns the root view of this view's hierarchy */
     root: func -> NView {
