@@ -241,3 +241,16 @@ NRect: cover {
 operator == (left, right: NRect) -> Bool {
 	left origin == right origin && left size == right size
 }
+
+NColor: cover {
+    red, green, blue, alpha: NFloat
+    
+    black: static func -> This { new(0.0, 0.0, 0.0, 1.0) }
+    white: static func -> This { new(1.0, 1.0, 1.0, 1.0) }
+    
+    init: func@ ~opaque (=red, =green, =blue) {
+        alpha = 1.0
+    }
+    
+    init: func@ (=red, =green, =blue, =alpha) {}
+}
