@@ -22,12 +22,13 @@ NFloat: cover from float extends Float {
 }
 
 NSize: cover {
-	width, height: NFloat
+	width: NFloat = 0.0
+	height: NFloat = 0.0
+	
+	init: func@ (=width, =height) {}
 	
 	zero: static func -> This {
-	    z: This
-	    z set(0.0, 0.0)
-	    return z
+	    new(0.0, 0.0)
 	}
 	
     min: static func (left, right: This) -> This {
@@ -88,12 +89,13 @@ operator -= (left: NSize@, right: NSize) -> NSize@ {
 }
 
 NPoint: cover {
-	x, y: NFloat
+	x: NFloat = 0.0
+	y: NFloat = 0.0
+	
+	init: func@ (=x, =y) {}
 	
 	zero: static func -> This {
-	    z: This
-	    z set(0.0, 0.0)
-	    return z
+	    new(0.0, 0.0)
 	}
 	
 	min: static func (left, right: This) -> This {
@@ -161,10 +163,10 @@ NRect: cover {
 	origin: NPoint
 	size: NSize
 	
+	init: func@ (=origin, =size) {}
+	
 	zero: static func -> This {
-	    z: This
-	    z set(0.0, 0.0, 0.0, 0.0)
-	    return z
+	    new(NPoint zero(), NSize zero())
 	}
 	
 	intersection: func (other: NRect) -> This {
