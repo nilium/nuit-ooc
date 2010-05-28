@@ -58,7 +58,8 @@ NView: class {
         setID(id)
     }
     
-    
+//////// Basic properties
+
     /** Get the name of the view */
     name: func -> String { _name clone() }
     
@@ -89,7 +90,9 @@ NView: class {
         _frame = frame
     }
     
-    /** Get the view's bounds */
+    /**
+        Get the view's bounds
+    */
     bounds: func -> NRect {
         result := frame()
         result origin set(0.0, 0.0)
@@ -120,93 +123,8 @@ NView: class {
     */
     setDisabled: func (=_disabled) {}
     
-    
-    /**
-        Find a subview with the given name.  Passing `true` to `recurse`
-        results in `findSubviewWithName` being called for subviews as well.
-    */
-    findSubviewWithName: func (name: String, recurse: Bool) -> NView {
-        iterator := _subviews front()
-        subview: NView = null
-        
-        if (recurse) {
-            while (subview == null && iterator hasNext()) {
-                view := iterator next()
-            
-                if (view name() == name) {
-                    return view
-                }
-            
-                subview = view findSubviewWithName(name, true)
-            }
-            
-            return subview
-        } else {
-            while (iterator hasNext()) {
-                view := iterator next()
-                if (view name() == name) {
-                    return view
-                }
-            }
-        }
-        
-        return null
-    }
-    
-    /** Find a subview with the given ID */
-    findSubviewWithName: func ~noRecurse (name: String) -> NView {
-        findSubviewWithName(name, false)
-    }
-    
-    /**
-        Find a subview with the given ID.  Passing `true` to `recurse`
-        results in `findSubviewWithName` being called for subviews as well.
-    */
-    findSubviewWithID: func (id: Int, recurse: Bool) -> NView {
-        iterator := _subviews front()
-        subview: NView = null
-        
-        if (recurse) {
-            while (subview == null && iterator hasNext()) {
-                view := iterator next()
-            
-                if (view id() == id) {
-                    return view
-                }
-            
-                subview = view findSubviewWithID(id, true)
-            }
-            
-            return subview
-        } else {
-            while (iterator hasNext()) {
-                view := iterator next()
-                if (view id() == id) {
-                    return view
-                }
-            }
-        }
-        
-        return null
-    }
-    
-    /** Find a subview with the given ID */
-    findSubviewWithID: func ~noRecurse (id: Int) -> NView {
-        findSubviewWithID(id, false)
-    }
-    
-    
-    isSubviewOf: func (view: NView) -> Bool {
-        sv := superview()
-        while (sv != null) {
-            if (sv == view)
-                return true
-            sv = sv superview()
-        }
-        return false
-    }
-    
-    
+//////// Layout
+
     /**
         Performs layout on subviews where necessary.
         
@@ -235,6 +153,103 @@ NView: class {
         simply do not attempt to change this from its default value.
     */
     clipsSubviews: func -> Bool { true }
+
+
+//////// View hierarchy
+
+    /**
+        Find a subview with the given name.  Passing `true` to :param:`recurse`
+        results in :func:`findSubviewWithName` being called for subviews as
+        well.
+        
+        :return: Returns the first view with the given :param:`name`, or null
+        if none is found.
+    */
+    findSubviewWithName: func (name: String, recurse: Bool) -> NView {
+        iterator := _subviews front()
+        
+        if (recurse) {
+            subview: NView = null
+            
+            while (subview == null && iterator hasNext()) {
+                subview = iterator next()
+            
+                if (subview name() == name) {
+                    return subview
+                }
+            
+                subview = subview findSubviewWithName(name, true)
+            }
+            
+            return subview
+        } else {
+            while (iterator hasNext()) {
+                view := iterator next()
+                if (view name() == name) {
+                    return view
+                }
+            }
+        }
+        
+        return null
+    }
+    
+    /** Find a subview with the given ID */
+    findSubviewWithName: func ~noRecurse (name: String) -> NView {
+        findSubviewWithName(name, false)
+    }
+    
+    /**
+        Find a subview with the given ID.  Passing `true` to :param:`recurse`
+        results in :func:`findSubviewWithID` being called for subviews as well.
+        
+        :return: Returns the first view with the given :param:`id`, or null if
+        none is found.
+    */
+    findSubviewWithID: func (id: Int, recurse: Bool) -> NView {
+        iterator := _subviews front()
+        
+        if (recurse) {
+            subview: NView = null
+            
+            while (subview == null && iterator hasNext()) {
+                subview = iterator next()
+            
+                if (subview id() == id) {
+                    return subview
+                }
+            
+                subview = subview findSubviewWithID(id, true)
+            }
+            
+            return subview
+        } else {
+            while (iterator hasNext()) {
+                view := iterator next()
+                if (view id() == id) {
+                    return view
+                }
+            }
+        }
+        
+        return null
+    }
+    
+    /** Find a subview with the given :param:`id` */
+    findSubviewWithID: func ~noRecurse (id: Int) -> NView {
+        findSubviewWithID(id, false)
+    }
+    
+    
+    isSubviewOf: func (view: NView) -> Bool {
+        sv := superview()
+        while (sv != null) {
+            if (sv == view)
+                return true
+            sv = sv superview()
+        }
+        return false
+    }
     
     
     /** Adds a view as a subview to this view's hierarchy */
