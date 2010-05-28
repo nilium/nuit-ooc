@@ -3,6 +3,8 @@ import structs/HashMap
 import Types
 import Renderer
 import EventHandler
+import Popup
+import Window
 
 /**
     Base class for all views in NUIT.
@@ -383,7 +385,9 @@ NView: class {
         
         return null
     }
-    
+
+//////// Drawing routines
+
     /**
         Draws the view using the renderer provided.
         
@@ -396,20 +400,82 @@ NView: class {
         
         Internal use only.
     */
-    __drawSubviews: func (renderer: NRenderer) {
-        //renderer saveState()
+    _drawSubwindows: func (renderer: NRenderer) {
+        renderer saveState()
         
-        back := _subviews back() reversed()
-        while (back hasNext()) {
-            subview := back next()
+        renderer setClippingRegion(NRect new(NPoint zero(), renderer screenSize()))
+        
+        iter := _subviews back() reversed()
+        while (iter hasNext()) {
+            subview := iter next()
             
-            subview draw(renderer)
-            subview __drawSubviews(renderer)
+            // this is bad practice, but it works
+            if (subview hidden() || subview instanceOf(NPopup))
+                continue
+            
+            if (subview instanceOf(NWindow)) {
+            
+                renderer saveState()
+                
+                
+                
+                _clipSubview(subview, renderer)
+                subview draw(renderer)
+                
+                clip := subview bounds()
+                clip origin = subview convertPointToScreen(clip origin)
+                
+                renderer setClippingRegion(clip)
+                subview _drawSubviews(renderer)
+            
+                renderer restoreState()
+            }
+            
+            subview _drawSubwindows(renderer)
         }
-//      while (back
         
+        renderer restoreState()
+    }
+    
+    /**
+        Draws all of a view's subviews.
         
-        //renderer restoreState()
+        Internal use only.
+    */
+    _drawSubviews: func (renderer: NRenderer) {
+        renderer saveState()
+        
+        /*
+            if the view is a root view and clips its subviews, then set up the
+            initial clipping region
+            
+            TODO: Move this into the GUI's renderer for root views, having it
+            here is kind of stupid.
+        */
+        if (clipsSubviews() && (superview() == null || this instanceOf(NPopup))) {
+            clip := bounds()
+            clip origin = convertPointToScreen(clip origin)
+            renderer setClippingRegion(clip)
+        }
+        
+        iter := _subviews back() reversed()
+        while (iter hasNext()) {
+            subview := iter next()
+            
+            // this is bad practice, but it works
+            if (subview hidden() || subview instanceOf(NWindow) || subview instanceOf(NPopup))
+                continue
+            
+            renderer saveState()
+            
+            _clipSubview(subview, renderer)
+            subview draw(renderer)
+            subview _drawSubviews(renderer)
+            
+            renderer restoreState()
+        }
+        
+        renderer restoreState()
     }
     
     /**
