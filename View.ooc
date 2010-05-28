@@ -15,19 +15,21 @@ NView: class {
     _disabled := false
     _hidden := false
     _eventhandlers: HashMap<String, LinkedList<NEventHandler>>
-    
+
+//////// Initializers
+
     /** Initializes the view with a frame */
-    init: func (frame: NRect) {
+    init: func ~noNameAndID (frame: NRect) {
         init(frame, "", 0)
     }
     
     /** Initializes the view with a frame and name */
-    init: func ~withName (frame: NRect, name: String) {
+    init: func ~noID (frame: NRect, name: String) {
         init(frame, name, 0)
     }
     
     /** Initializes the view with a frame, name, and ID */
-    init: func ~withNameAndID (frame: NRect, name: String, id: Int) {
+    init: func (frame: NRect, name: String, id: Int) {
         _eventhandlers = HashMap<String, LinkedList<NEventHandler>> new(16)
         _subviews = LinkedList<NView> new()
         _min_size set(0.0, 0.0)
