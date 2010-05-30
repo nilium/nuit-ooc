@@ -180,7 +180,7 @@ NFont: abstract class {
         Returns the size of the text for the given string.
     */
     sizeOfText: func (str: String) -> NSize {
-        iter := str front()
+        iter := str iterator()
         lastChar := 0
         
         size: NSize

@@ -168,7 +168,7 @@ NView: class {
         if none is found.
     */
     findSubviewWithName: func (name: String, recurse: Bool) -> NView {
-        iterator := _subviews front()
+        iterator := _subviews iterator()
         
         if (recurse) {
             subview: NView = null
@@ -209,7 +209,7 @@ NView: class {
         none is found.
     */
     findSubviewWithID: func (id: Int, recurse: Bool) -> NView {
-        iterator := _subviews front()
+        iterator := _subviews iterator()
         
         if (recurse) {
             subview: NView = null
@@ -359,7 +359,7 @@ NView: class {
         The point is assumed to be in the view's coordinate system already.
     */
     viewForPoint: func (point: NPoint) -> NView {
-        last := _subviews back()
+        last := _subviews backIterator()
         
         boundsOrigin := bounds() origin
         
@@ -405,7 +405,7 @@ NView: class {
         
         renderer setClippingRegion(NRect new(NPoint zero(), renderer screenSize()))
         
-        iter := _subviews back() reversed()
+        iter := _subviews backward()
         while (iter hasNext()) {
             subview := iter next()
             
@@ -458,7 +458,7 @@ NView: class {
             renderer setClippingRegion(clip)
         }
         
-        iter := _subviews back() reversed()
+        iter := _subviews backward()
         while (iter hasNext()) {
             subview := iter next()
             
@@ -591,7 +591,7 @@ NView: class {
     _fireEvent: func (event: String, data: HashMap<String, Object>) {
         handlers := _eventhandlers get(event) as LinkedList<NEventHandler>
         if (handlers != null) {
-            iter := handlers front()
+            iter := handlers iterator()
             while (iter hasNext())
                 iter next() fire(this, event, data)
         }
