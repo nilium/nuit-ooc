@@ -43,6 +43,16 @@ NGUI: class {
         _windows = LinkedList<NWindow> new()
     }
     
+    makeActive: func {
+        __instance = this
+    }
+    
+    makeInactive: func {
+        if (__instance == this) {
+            __instance = null
+        }
+    }
+    
     /**
         Sets the renderer used by the GUI.
     */
