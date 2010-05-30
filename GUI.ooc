@@ -58,7 +58,7 @@ NGUI: class {
             pushMouseMoveEvent(_mouse_cur)
     }
     
-    pushMousePushedEvent: func (button: Int, position: NPoint) {
+    pushMousePressedEvent: func (button: Int, position: NPoint) {
         __updateMousePosition(position)
         
         view: NView = null
