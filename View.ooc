@@ -690,6 +690,13 @@ NView: class {
         handlers add(handler)
     }
     
+    /** Returns the event handler created for the function/closure */
+    addEventHandler: func ~closure (event: String, handlerFn: Func (NView, String, HashMap<String, Object>)) -> NEventHandler {
+        handler := NClosureEventHandler new(handlerFn)
+        addEventHandler(event, handler)
+        return handler
+    }
+    
     removeEventHandler: func (event: String, handler: NEventHandler) {
         handlers := _eventhandlers get(event) as LinkedList<NEventHandler>
         if (handlers != null)
