@@ -168,9 +168,53 @@ NGUI: class {
             return
         
         _renderer acquire()
-        _renderer saveState()
         
-        _renderer restoreState()
+        _renderer setFillColor(NColor white())
+        _renderer disableClipping()
+        
+        iter := _windows iterator()
+        while (iter hasNext()) {
+            window := iter next()
+            
+            if (window hidden?(false))
+                continue
+            
+            _renderer setDrawingOrigin(window frame() origin)
+            
+            _renderer saveState()
+            
+            window draw(_renderer)
+            _renderer restoreState()
+            
+            _renderer saveState()
+            window drawSubviews(_renderer)
+            _renderer restoreState()
+            
+            _renderer saveState()
+            window drawSubwindows(_renderer)
+            _renderer restoreState()
+        }
+        
+        if (_popup) {
+            if (_popup hidden?(false)) {
+                _popup = null
+            } else {
+                _renderer setDrawingOrigin(_popup convertPointFromScreen(NPoint zero()))
+                
+                _renderer saveState()
+                _popup draw(_renderer)
+                _renderer restoreState()
+
+                _renderer saveState()
+                _popup drawSubviews(_renderer)
+                _renderer restoreState()
+
+                _renderer saveState()
+                _popup drawSubwindows(_renderer)
+                _renderer restoreState()
+            }
+        }
+        
         _renderer release()
     }
     
