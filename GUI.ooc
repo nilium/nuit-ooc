@@ -182,9 +182,10 @@ NGUI: class {
             if (_mainWindow)
                 _mainWindow lostMainWindow()
             
-            if (window superview() == null && _windows contains(window))
-                _windows remove(window) .add(window)
+            if (_windows remove(window) && window superview() == null)
+                 _windows add(window)
             
+            _mainWindow = window
             // false movement to set off any other changes due to the change
             // of main window
             pushMouseMoveEvent(_mouse_cur)
