@@ -448,7 +448,7 @@ NView: class {
         
         Internal use only.
     */
-    _drawSubwindows: func (renderer: NRenderer) {
+    drawSubwindows: func (renderer: NRenderer) {
         renderer saveState()
         
         renderer setClippingRegion(NRect new(NPoint zero(), renderer screenSize()))
@@ -474,12 +474,12 @@ NView: class {
                 clip origin = subview convertPointToScreen(clip origin)
                 
                 renderer setClippingRegion(clip)
-                subview _drawSubviews(renderer)
+                subview drawSubviews(renderer)
             
                 renderer restoreState()
             }
             
-            subview _drawSubwindows(renderer)
+            subview drawSubwindows(renderer)
         }
         
         renderer restoreState()
@@ -490,7 +490,7 @@ NView: class {
         
         Internal use only.
     */
-    _drawSubviews: func (renderer: NRenderer) {
+    drawSubviews: func (renderer: NRenderer) {
         renderer saveState()
         
         /*
@@ -518,7 +518,7 @@ NView: class {
             
             _clipSubview(subview, renderer)
             subview draw(renderer)
-            subview _drawSubviews(renderer)
+            subview drawSubviews(renderer)
             
             renderer restoreState()
         }
