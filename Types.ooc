@@ -250,8 +250,10 @@ operator == (left, right: NRect) -> Bool {
 NColor: cover {
     red, green, blue, alpha: NFloat
     
-    black: static func -> This { new(0.0, 0.0, 0.0, 1.0) }
-    white: static func -> This { new(1.0, 1.0, 1.0, 1.0) }
+    black: static func (alpha: NFloat) -> This { new(0.0, 0.0, 0.0, alpha) }
+    black: static func ~opaque -> This { new(0.0, 0.0, 0.0) }
+    white: static func (alpha: NFloat) -> This { new(1.0, 1.0, 1.0, alpha) }
+    white: static func ~opaque -> This { new(1.0, 1.0, 1.0) }
     
     init: func@ ~opaque (=red, =green, =blue) {
         alpha = 1.0
