@@ -65,6 +65,8 @@ NSize: cover {
 	height: inline func -> NFloat {
 		height
 	}
+	
+	toPoint: func -> NPoint { NPoint new(width, height) }
 }
 
 operator == (left, right: NSize) -> Bool {
@@ -132,6 +134,8 @@ NPoint: cover {
 	y: inline func -> NFloat {
 		y
 	}
+	
+	toSize: func -> NSize { NSize new(x, y) }
 }
 
 operator == (left, right: NPoint) -> Bool {
