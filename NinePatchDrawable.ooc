@@ -38,7 +38,7 @@ NNinePatchDrawable: class extends NDrawable {
         ths := th * scaleTopLeft height()
         bhs := bh * scaleBottomRight height()
         
-        imageSize := image size()
+        imageSize := image frameSize()
         
         dw := NFloat max(rect width() - (lw * scaleTopLeft width) - (rw * scaleBottomRight width), 0.0)
         dh := NFloat max(rect height() - (th * scaleTopLeft height) - (bh * scaleBottomRight height), 0.0)
