@@ -104,7 +104,25 @@ NView: class {
     /**
         Get whether or not the view is hidden.
     */
-    hidden: func -> Bool { _hidden }
+    hidden?: func -> Bool { hidden?(true) }
+    
+    /**
+        Get whether or not the view is hidden.
+        
+        If :param:`recurse` is true, it will check superviews to see if any of
+        them are hidden as well, returning true if any superview isn't visible.
+    */
+    hidden?: func ~recursive (recurse: Bool) -> Bool {
+        hidden := _hidden
+        if (!hidden && recurse) {
+            sv := superview()
+            while (!hidden && sv) {
+                hidden = sv hidden?(false)
+                sv = sv superview()
+            }
+        }
+        return hidden
+    }
     
     /**
         Set whether or not the view is hidden.
@@ -128,7 +146,25 @@ NView: class {
     /**
         Get whether or not the view is disabled.
     */
-    disabled: func -> Bool { _disabled }
+    disabled?: func -> Bool { disabled?(false) }
+    
+    /**
+        Get whether or not the view is disabled.
+        
+        If :param:`recurse` is true, it will check superviews to see if any of
+        them are disabled as well, returning true if any superview is disabled.
+    */
+    disabled?: func ~recursive (recurse: Bool) -> Bool {
+        disabled := _disabled
+        if (!disabled && recurse) {
+            sv := superview()
+            while (!disabled && sv) {
+                disabled = sv disabled?(false)
+                sv = sv superview()
+            }
+        }
+        return disabled
+    }
     
     /**
         Set whether or not the view is disabled.
@@ -390,7 +426,7 @@ NView: class {
         while (last hasPrev()) {
             subview := last prev()
             
-            if (subview hidden())
+            if (subview hidden?())
                 continue
             
             trpoint := point
@@ -434,7 +470,7 @@ NView: class {
             subview := iter next()
             
             // this is bad practice, but it works
-            if (subview hidden() || subview instanceOf(NPopup))
+            if (subview hidden?() || subview instanceOf(NPopup))
                 continue
             
             if (subview instanceOf(NWindow)) {
@@ -487,7 +523,7 @@ NView: class {
             subview := iter next()
             
             // this is bad practice, but it works
-            if (subview hidden() || subview instanceOf(NWindow) || subview instanceOf(NPopup))
+            if (subview hidden?() || subview instanceOf(NWindow) || subview instanceOf(NPopup))
                 continue
             
             renderer saveState()
