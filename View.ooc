@@ -452,6 +452,7 @@ NView: class {
         renderer saveState()
         
         renderer setClippingRegion(NRect new(NPoint zero(), renderer screenSize()))
+        renderer disableClipping()
         
         iter := _subviews backward()
         while (iter hasNext()) {
@@ -462,18 +463,20 @@ NView: class {
                 continue
             
             if (subview instanceOf(NWindow)) {
-            
+                
+                renderer setDrawingOrigin(subview convertPointToScreen(frame() origin))
+                
                 renderer saveState()
                 
-                
-                
-                _clipSubview(subview, renderer)
                 subview draw(renderer)
                 
-                clip := subview bounds()
-                clip origin = subview convertPointToScreen(clip origin)
+                if (subview clipsSubviews()) {
+                    clip := subview bounds()
+                    clip origin = subview convertPointToScreen(clip origin)
+                    renderer clipRegion(clip)
+                    renderer enableClipping()
+                }
                 
-                renderer setClippingRegion(clip)
                 subview drawSubviews(renderer)
             
                 renderer restoreState()
@@ -500,10 +503,14 @@ NView: class {
             TODO: Move this into the GUI's renderer for root views, having it
             here is kind of stupid.
         */
-        if (clipsSubviews() && (superview() == null || this instanceOf(NPopup))) {
+        if (clipsSubviews()) {
             clip := bounds()
             clip origin = convertPointToScreen(clip origin)
-            renderer setClippingRegion(clip)
+            if (superview() == null || this instanceOf(NPopup))
+                renderer setClippingRegion(clip)
+            else
+                renderer clipRegion(clip)
+            renderer enableClipping()
         }
         
         iter := _subviews backward()
@@ -518,6 +525,14 @@ NView: class {
             
             _clipSubview(subview, renderer)
             subview draw(renderer)
+            
+            if (subview clipsSubviews()) {
+                clip := subview bounds()
+                clip origin = subview convertPointToScreen(clip origin)
+                renderer enableClipping()
+                renderer clipRegion(clip)
+            }
+            
             subview drawSubviews(renderer)
             
             renderer restoreState()
@@ -530,15 +545,13 @@ NView: class {
         Clips rendering to a subview's frame
     */
     _clipSubview: func (subview: NView, renderer: NRenderer) {
-        /*
-        cur_clip := renderer getScreenClip()
+        origin := subview convertPointToScreen(NPoint zero())
+        renderer setDrawingOrigin(origin)
         
-        bounds := this bounds()
-        frame := subview frame()
-        
-        //renderer translate(bounds origin)
-        //renderer translate(frame origin)
-        */
+        if (subview clipsSubviews()) {
+            renderer enableClipping()
+            renderer clipRegion(NRect new(origin, size()))
+        }
     }
 
 //////// Events & event handling

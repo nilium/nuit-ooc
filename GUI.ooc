@@ -170,6 +170,7 @@ NGUI: class {
         _renderer acquire()
         
         _renderer setFillColor(NColor white())
+        _renderer setClippingRegion(NRect new(NPoint zero(), _renderer screenSize()))
         _renderer disableClipping()
         
         iter := _windows iterator()
