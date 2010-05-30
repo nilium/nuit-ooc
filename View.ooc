@@ -137,6 +137,18 @@ NView: class {
     */
     setDisabled: func (=_disabled) {}
     
+    /**
+        Makes the view disabled.  This is the same as calling
+        `setDisabled(true)`, and is provided mainly for convenience.
+    */
+    disable: final func { setDisabled(true) }
+    
+    /**
+        Makes the view enabled.  This is the same as calling
+        `setDisabled(false)`, and is provided mainly for convenience.
+    */
+    enable: final func { setDisabled(false) }
+    
 //////// Layout
 
     /**
