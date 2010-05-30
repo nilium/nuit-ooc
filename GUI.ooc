@@ -146,6 +146,16 @@ NGUI: class {
     
     pushMouseReleasedEvent: func (button: Int, position: NPoint) {
         __updateMousePosition(position)
+        
+        if (_mouseView && !(_mouseView hidden?(true) || _mouseView disabled?(true))) {
+            position = _mouseView convertPointFromScreen(position)
+            _mouseView mouseReleased(button, position)
+            
+            if (_overView && NRect new(NPoint zero(), _mouseView size()) contains(position)) {
+                _overView mouseLeft()
+                _overView = null
+            }
+        }
     }
     
     /**
