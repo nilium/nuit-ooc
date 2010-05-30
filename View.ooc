@@ -114,6 +114,18 @@ NView: class {
     setHidden: func (=_hidden) {}
     
     /**
+        Makes the view hidden.  This is the same as calling `setHidden(true)`,
+        and is provided mainly for convenience.
+    */
+    hide: final func { setHidden(true) }
+    
+    /**
+        Makes the view visible.  This is the same as calling `setHidden(false)`,
+        and is provided mainly for convenience.
+    */
+    show: final func { setHidden(false) }
+    
+    /**
         Get whether or not the view is disabled.
     */
     disabled: func -> Bool { _disabled }
