@@ -66,6 +66,11 @@ NSize: cover {
 		height
 	}
 	
+	contains: func (point: NPoint) -> Bool {
+	    return (0.0 <= point x && point x <= width &&
+	            0.0 <= point y && point y <= height)
+	}
+	
 	toPoint: func -> NPoint { NPoint new(width, height) }
 }
 
