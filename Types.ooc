@@ -179,8 +179,8 @@ NRect: cover {
 		intersection: This
 		
 		intersection origin = NPoint max(origin, other origin)
-		intersection size width = NFloat min(right(), other right()) - intersection left()
-		intersection size height = NFloat min(bottom(), other bottom()) - intersection top()
+		intersection size width = NFloat max(NFloat min(right(), other right()) - intersection left(), 0.0)
+		intersection size height = NFloat max(NFloat min(bottom(), other bottom()) - intersection top(), 0.0)
 		
 		return intersection
 	}
