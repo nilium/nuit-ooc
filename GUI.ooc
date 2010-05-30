@@ -1,6 +1,9 @@
+import structs/LinkedList
 import Types
 import View
 import Renderer
+import Window
+import Popup
 
 NGUI: class {
     /** The active NGUI instance **/
@@ -14,7 +17,20 @@ NGUI: class {
     _mouse_prev: NPoint
     
     /** The view the mouse is currently over */
-    _mouseOverView: NView = null
+    _overView: NView = null
+    /**
+        The view to receive mouse movement/mouse release events after having
+        been clicked on.
+    */
+    _mouseView: NView = null
+    /** The view with focus (receives keyboard input) */
+    _focalView: NView = null
+    /** The primary window, receives mouse movement events */
+    _mainWindow: NWindow = null
+    /** The active popup view */
+    _popup: NPopup = null
+    
+    _windows: LinkedList<NWindow>
     
     instance: static func -> NGUI {
         if (__instance == null)
@@ -24,6 +40,7 @@ NGUI: class {
     
     init: func {
         __instance = this
+        _windows = LinkedList<NWindow> new()
     }
     
     /**
