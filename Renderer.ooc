@@ -53,6 +53,28 @@ NRenderer: abstract class {
 	setClippingRegion: abstract func (region: NRect)
 	
 	/**
+	    Adds a clipping region such that the intersection of the current
+	    clipping region and the new :param:`region` is the new clipping region.
+	    
+	    Not to be confused with :meth:`clippingRegion`, which returns the
+	    current clipping region.
+	*/
+	clipRegion: abstract func (region: NRect) {
+	    setClippingRegion(region % clippingRegion())
+	}
+	
+	/**
+	    Enables clipping of all drawing to the clipping region set by
+	    :meth:`setClippingRegion`.
+	*/
+	enableClipping: abstract func
+	
+	/**
+	    Disables clipping of drawing.
+	*/
+	disableClipping: abstract func
+	
+	/**
 	    Gets the drawing origin set by :meth:`setDrawingOrigin`.
 	*/
 	drawingOrigin: abstract func -> NPoint
