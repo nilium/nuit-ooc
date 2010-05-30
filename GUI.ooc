@@ -32,7 +32,7 @@ NGUI: class {
     
     _windows: LinkedList<NWindow>
     
-    instance: static func -> NGUI {
+    activeInstance: static func -> NGUI {
         if (__instance == null)
             return NGUI new()
         return __instance
