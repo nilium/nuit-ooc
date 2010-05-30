@@ -183,7 +183,6 @@ NGUI: class {
             _renderer setDrawingOrigin(window frame() origin)
             
             _renderer saveState()
-            
             window draw(_renderer)
             _renderer restoreState()
             
