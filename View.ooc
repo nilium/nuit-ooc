@@ -414,7 +414,7 @@ NView: class {
         while (last hasPrev()) {
             subview := last prev()
             
-            if (subview hidden?())
+            if (subview hidden?(false))
                 continue
             
             trpoint := point
@@ -458,7 +458,7 @@ NView: class {
             subview := iter next()
             
             // this is bad practice, but it works
-            if (subview hidden?() || subview instanceOf(NPopup))
+            if (subview hidden?(false) || subview instanceOf(NPopup))
                 continue
             
             if (subview instanceOf(NWindow)) {
@@ -511,7 +511,7 @@ NView: class {
             subview := iter next()
             
             // this is bad practice, but it works
-            if (subview hidden?() || subview instanceOf(NWindow) || subview instanceOf(NPopup))
+            if (subview hidden?(false) || subview instanceOf(NWindow) || subview instanceOf(NPopup))
                 continue
             
             renderer saveState()
