@@ -5,4 +5,9 @@ NWindow: class extends NView {
     init: func (frame: NRect, name: String, id: Int) {
         super(frame, name, id)
     }
+    
+    canBecomeMainWindow?: func -> Bool {true}
+    
+    becameMainWindow: func {}
+    lostMainWindow: func {}
 }
