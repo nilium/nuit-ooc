@@ -64,7 +64,7 @@ NGUI: class {
         view: NView = null
         
         if (_popup) {
-            if (!_popup hidden?()) {
+            if (!_popup hidden?(false)) {
                 view = _popup viewForPoint(_popup convertPointFromScreen(_mouse_cur))
                 if (view == null) {
                     _popup hide()
@@ -80,7 +80,7 @@ NGUI: class {
             while (view == null && iter hasNext()) {
                 window := iter next()
             
-                if (window hidden?())
+                if (window hidden?(false))
                     continue
             
                 view = window viewForPoint(window convertPointFromScreen(_mouse_cur))
@@ -101,7 +101,7 @@ NGUI: class {
             if (_focalView) _focalView focusGained()
         }
         
-        if (view && !view disabled?()) {
+        if (view && !view disabled?(false)) {
             root := view root()
             if (root instanceOf(NWindow))
                 setMainWindow(root as NWindow)
@@ -116,7 +116,7 @@ NGUI: class {
         
         position subtract(_mouse_prev)
         
-        if (_mouseView && !(_mouseView hidden?() || _mouseView disabled?(true))) {
+        if (_mouseView && !(_mouseView hidden?(true) || _mouseView disabled?(true))) {
             _mouseView mouseMoved(_mouseView convertPointFromScreen(_mouse_cur), position)
         } else {
             set := false
@@ -124,13 +124,13 @@ NGUI: class {
             point: NPoint
             
             if (_popup) {
-                if (!_popup hidden?())
+                if (!_popup hidden?(false))
                     view = _popup viewForPoint(_popup convertPointFromScreen(_mouse_cur))
                 else
                     _popup = null
             }
             
-            if (view == null && _mainWindow && !(_mainWindow hidden?() || _mainWindow disabled?()))
+            if (view == null && _mainWindow && !(_mainWindow hidden?(true) || _mainWindow disabled?(false)))
                 view = _mainWindow viewForPoint(_mainWindow convertPointFromScreen(_mouse_cur))
             
             if (_overView != view) {
@@ -168,7 +168,7 @@ NGUI: class {
         if (window == _mainWindow)
             return
         
-        if (window && window canBecomeMainWindow?()) {
+        if (window && window canBecomeMainWindow?() && !window hidden?(true)) {
             if (_mainWindow)
                 _mainWindow lostMainWindow()
             
