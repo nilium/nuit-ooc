@@ -638,6 +638,29 @@ NView: class {
     }
     
     /**
+        Called when the mouse has entered the view.  This does not imply that
+        the view has gained focus or will receive any other events.
+    */
+    mouseEntered: func {}
+    
+    /**
+        Called when the mouse has left the view.  This does not imply that
+        the view has lost focus or that it will receive any other events.
+    */
+    mouseLeft: func {}
+    
+    /**
+        Called when the view has gained focus (is now the receiver of keyboard
+        input).
+    */
+    focusGained: func {}
+    
+    /**
+        Called when the view has lost focus (will not receive keyboard input).
+    */
+    focusLost: func {}
+    
+    /**
         Called by an NView or subclass thereof when a custom event should be
         fired for the view.  This sends the :param:`event` and the
         corresponding event :param:`data` to all event handlers registered for
