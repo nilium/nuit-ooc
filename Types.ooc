@@ -155,6 +155,11 @@ NRect: cover {
 	origin: NPoint
 	size: NSize
 	
+	init: func@ ~valued (x, y, w, h: NFloat) {
+	    origin set(x, y)
+	    size set(w, h)
+	}
+	
 	init: func@ (=origin, =size) {}
 	
 	zero: static func -> This {
