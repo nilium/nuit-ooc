@@ -8,6 +8,7 @@ NFloat: cover from float extends Float {
 	abs: extern(fabsf) func -> This
 	floor: extern(floorf) func -> This
 	ceil: extern(ceilf) func -> This
+	mod: extern(fmodf) func(y: This) -> This
 	EPSILON: static const extern(FLT_EPSILON) This
 	
 	/**
@@ -68,6 +69,10 @@ NSize: cover {
 
 operator == (left, right: NSize) -> Bool {
 	left width equals(right width) && left height equals(right height)
+}
+
+operator != (left, right: NSize) -> Bool {
+    !(left == right)
 }
 
 operator += (left: NSize@, right: NSize) -> NSize@ {
@@ -131,6 +136,10 @@ NPoint: cover {
 
 operator == (left, right: NPoint) -> Bool {
 	left x equals(right x) && left y equals(right y)
+}
+
+operator != (left, right: NPoint) -> Bool {
+    !(left == right)
 }
 
 operator += (left: NPoint@, right: NPoint) -> NSize@ {
@@ -245,6 +254,14 @@ NRect: cover {
 
 operator == (left, right: NRect) -> Bool {
 	left origin == right origin && left size == right size
+}
+
+operator != (left, right: NRect) -> Bool {
+    !(left == right)
+}
+
+operator % (left, right: NRect) -> NRect {
+    left intersection(right)
 }
 
 NColor: cover {
