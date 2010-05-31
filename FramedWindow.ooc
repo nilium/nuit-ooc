@@ -13,8 +13,10 @@ NFramedWindow: class extends NWindow {
     }
     
     draw: func (renderer: NRenderer) {
-        if (_drawable != null)
-            _drawable drawInRect(renderer, NRect new(NPoint zero(), size()), 0)
+        if (_drawable != null) {
+            frame: Int = (isMainWindow?() ? 0 : 1)
+            _drawable drawInRect(renderer, NRect new(NPoint zero(), size()), frame)
+        }
     }
     
     mousePressed: func (button: Int, position: NPoint) {
