@@ -59,8 +59,8 @@ NRenderer: abstract class {
 	    Not to be confused with :meth:`clippingRegion`, which returns the
 	    current clipping region.
 	*/
-	clipRegion: abstract func (region: NRect) {
-	    setClippingRegion(region % clippingRegion())
+	clipRegion: func (region: NRect) {
+	    setClippingRegion(region intersection(clippingRegion()))
 	}
 	
 	/**
