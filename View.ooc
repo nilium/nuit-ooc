@@ -516,27 +516,33 @@ NView: class {
         iter := _subviews backward()
         while (iter hasNext()) {
             subview := iter next()
-            
-            // this is bad practice, but it works
-            if (subview hidden?(false) || subview instanceOf(NWindow) || subview instanceOf(NPopup))
-                continue
-            
-            renderer saveState()
-            
-            _clipSubview(subview, renderer)
-            subview draw(renderer)
-            
-            if (subview clipsSubviews()) {
-                clip := subview bounds()
-                clip origin = subview convertPointToScreen(clip origin)
-                renderer enableClipping()
-                renderer clipRegion(clip)
-            }
-            
-            subview drawSubviews(renderer)
-            
-            renderer restoreState()
+            drawSubview(subview)
         }
+        
+        renderer restoreState()
+    }
+    
+    /**
+        Draws a specific subview
+    */
+    drawSubview: func (renderer: NRenderer, subview: NView) {
+        // this is bad practice, but it works
+        if (subview hidden?(false) || subview instanceOf(NWindow) || subview instanceOf(NPopup))
+            return
+        
+        renderer saveState()
+        
+        _clipSubview(subview, renderer)
+        subview draw(renderer)
+        
+        if (subview clipsSubviews()) {
+            clip := subview bounds()
+            clip origin = subview convertPointToScreen(clip origin)
+            renderer enableClipping()
+            renderer clipRegion(clip)
+        }
+        
+        subview drawSubviews(renderer)
         
         renderer restoreState()
     }
