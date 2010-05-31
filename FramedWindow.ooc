@@ -62,4 +62,15 @@ NFramedWindow: class extends NWindow {
             _dragging = 0
         }
     }
+    
+    bounds: func -> NRect {
+        bounds: NRect
+        bounds origin set(1.0, 24.0)
+        bounds size = size()
+        bounds size subtract(bounds origin toSize())
+        bounds size width -= 1
+        bounds size height -= 1
+        return bounds
+        
+    }
 }
