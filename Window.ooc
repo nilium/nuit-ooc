@@ -1,3 +1,4 @@
+import GUI
 import Types
 import View
 
@@ -10,4 +11,8 @@ NWindow: class extends NView {
     
     becameMainWindow: func {}
     lostMainWindow: func {}
+    
+    isMainWindow?: func -> Bool {
+        NGUI activeInstance() mainWindow() == this
+    }
 }
