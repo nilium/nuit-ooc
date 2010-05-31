@@ -243,4 +243,6 @@ NGUI: class {
         }
     }
     
+    mainWindow: func -> NWindow { _mainWindow }
+    
 }
