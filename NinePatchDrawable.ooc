@@ -11,11 +11,9 @@ NNinePatchDrawable: class extends NDrawable {
     scaleTopLeft: NSize = NSize new(1.0, 1.0)
     scaleBottomRight: NSize = NSize new(1.0, 1.0)
     
-    init: func {
-        borderTopLeft = NSize new(8.0, 8.0)
-        borderBottomRight = NSize new(8.0, 8.0)
-        scaleTopLeft = NSize new(1.0, 1.0)
-        scaleBottomRight = NSize new(1.0, 1.0)
+    init: func ~bordered (=image, =borderTopLeft, =borderBottomRight, scale: NFloat) {
+        scaleTopLeft set(scale, scale)
+        scaleBottomRight set(scale, scale)
     }
     
     drawInRect: func (renderer: NRenderer, rect: NRect, frame: Int) {
