@@ -17,7 +17,7 @@ NImageDrawable: class extends NDrawable {
     scaling := NImageScaling none
     
     drawInRect: func (renderer: NRenderer, rect: NRect, frame: Int) {
-        imageSize := image size()
+        imageSize := image frameSize()
         match scaling {
             case NImageScaling none =>
                 rect size width = NFloat min(imageSize width, rect size width)
