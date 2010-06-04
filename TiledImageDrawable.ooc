@@ -12,7 +12,7 @@ NTilingMode: enum {
 NTiledImageDrawable: class extends NDrawable {
     image: NImage
     tilingMode := NTilingMode both
-    offset: NPoint = NPoint new(0.5, 0.5)
+    offset: NPoint
     
     init: func (=image) {}
     
