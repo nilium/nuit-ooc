@@ -516,7 +516,7 @@ NView: class {
         iter := _subviews backward()
         while (iter hasNext()) {
             subview := iter next()
-            drawSubview(subview)
+            drawSubview(renderer, subview)
         }
         
         renderer restoreState()
