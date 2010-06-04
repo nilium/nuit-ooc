@@ -45,14 +45,14 @@ NFramedWindow: class extends NWindow {
     }
     
     mouseMoved: func (to: NPoint, delta: NPoint) {
-        if (_dragging == 1) {
+        if (_dragging != 0) {
             frame := frame()
-            frame origin add(delta)
-            setFrame(frame)
-        } else if (_dragging == 2) {
-            frame := frame()
-            to add(_drag_point)
-            frame size = to toSize()
+            if (_dragging == 1) {
+                frame origin add(delta)
+            } else {
+                to add(_drag_point)
+                frame size = to toSize()
+            }
             setFrame(frame)
         }
     }
