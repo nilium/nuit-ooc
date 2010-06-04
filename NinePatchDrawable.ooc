@@ -5,11 +5,10 @@ import Drawable
 
 NNinePatchDrawable: class extends NDrawable {
     image: NImage
-    
-    borderTopLeft: NSize = NSize new(8.0, 8.0)
-    borderBottomRight: NSize = NSize new(8.0, 8.0)
-    scaleTopLeft: NSize = NSize new(1.0, 1.0)
-    scaleBottomRight: NSize = NSize new(1.0, 1.0)
+    borderTopLeft := NSize new(8.0, 8.0)
+    borderBottomRight := NSize new(8.0, 8.0)
+    scaleTopLeft := NSize new(1.0, 1.0)
+    scaleBottomRight := NSize new(1.0, 1.0)
     
     init: func ~bordered (=image, =borderTopLeft, =borderBottomRight, scale: NFloat) {
         scaleTopLeft set(scale, scale)
