@@ -176,18 +176,35 @@ NFont: class {
     */
     sizeOfText: func (str: String) -> NSize {
         iter := str iterator()
-        lastChar := 0
+        lastChr, chr: ULong
+        lastChr = 0
         
-        size: NSize
-        
+        init: Bool = false
+        rect: NRect = NRect new(0.0, 0.0, 0.0, 0.0)
+        charRect: NRect
+        point: NPoint
         while (iter hasNext()) {
             chr := iter next()
             
-            // TODO: code for determining the size of a given string
+            charRect origin = point
+            charRect size = glyphSize(chr)
+            charRect origin add(glyphKerning(lastChr, chr)) .add(glyphBearing(chr))
             
-            lastChar = chr
+            if (init) {
+                if (charRect left() < rect left()) rect setLeft(charRect left())
+                if (charRect right() > rect right()) rect setRight(charRect right())
+                if (charRect top() < rect top()) rect setTop(charRect top())
+                if (charRect bottom() > rect bottom()) rect setBottom(charRect bottom())
+            } else {
+                init = true
+                rect = charRect
+            }
+            
+            point x += glyphAdvance(chr) x
+            
+            lastChr = chr
         }
         
-        return size
+        return rect size
     }
 }
