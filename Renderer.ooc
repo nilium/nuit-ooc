@@ -133,6 +133,11 @@ NRenderer: abstract class {
 	loadImageWithFrames: abstract func (url: String, frameSize: NSize, frameCount: Int) -> NImage
 	
 	/**
+	    Loads a font from the given :param:`url`.
+	*/
+	loadFont: abstract func (url: String, ptsize: Int, italic, bold: Bool) -> NFont
+	
+	/**
 	    Draws an :param:`image` in the area specified by :param:`inRect`.  The
 	    image should be stretched to fill the area.
 	*/

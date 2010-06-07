@@ -21,7 +21,7 @@ NFontData: abstract class {
     /**
         Returns whether or not the font can render the given character.
     */
-    supportsGlyph: abstract func (chr: Char) -> Bool
+    supportsGlyph: abstract func (chr: ULong) -> Bool
     
     /**
         Returns the pixel size of the glyph for the character.
@@ -29,23 +29,23 @@ NFontData: abstract class {
         In the event that the glyph is unsupported, a default size should be
         provided for that glyph.
     */
-    glyphSize: abstract func (chr: Char) -> NSize
+    glyphSize: abstract func (chr: ULong) -> NSize
     
     /**
         Returns the relative horizontal position of the next character to
         follow the glyph without kerning.
     */
-    glyphAdvance: abstract func (chr: Char) -> NSize
+    glyphAdvance: abstract func (chr: ULong) -> NPoint
     
     /**
         Returns the kerning for the given glyph pairing.
     */
-    glyphKerning: abstract func (left, right: Char) -> NFloat
+    glyphKerning: abstract func (left, right: ULong) -> NPoint
     
     /**
         Returns the relative offset of the glyph from the baseline.
     */
-    glyphPosition: abstract func (chr: Char) -> NPoint
+    glyphBearing: abstract func (chr: ULong) -> NPoint
     
     /**
         Returns what should be the minimum height of a line for the font.
@@ -58,12 +58,12 @@ NFontData: abstract class {
     baseLine: abstract func -> NFloat
 }
 
-NFont: abstract class {
+NFont: class {
     /** The URL the font was/is to be loaded from */
     url: String = ""
     
     /** The size of the font */
-    size: NFloat = 12.0
+    size: Int = 12
     
     /** Whether or not the font is bold */
     bold := false
@@ -74,15 +74,10 @@ NFont: abstract class {
     /**
         The font data provided by the last renderer to use the font.
     */
-    fontData: NFontData
-    
-    
-    init: func ~notBoldNotItalic (url: String, size: NFloat) {
-        init(url, size, false, false)
-    }
+    data: NFontData
     
     init: func (url: String, =size, =bold, =italic) {
-        this url = url clone()
+        this url = url ? url clone() : null
     }
     
     /** Returns the size of the font in pixels. */
@@ -94,9 +89,9 @@ NFont: abstract class {
         cases.
     */
     weight: func -> NFloat {
-        if (fontData == null)
+        if (data == null)
             Exception new(This, "Font has not been loaded") throw()
-        return fontData baseLine()
+        return data baseLine()
     }
     
     /**
@@ -112,10 +107,10 @@ NFont: abstract class {
     /**
         Returns whether or not the font can render the given character.
     */
-    supportsGlyph: func (chr: Char) -> Bool {
-        if (fontData == null)
+    supportsGlyph: func (chr: ULong) -> Bool {
+        if (data == null)
             Exception new(This, "Font has not been loaded") throw()
-        return fontData supportsGlyph(chr)
+        return data supportsGlyph(chr)
     }
     
     /**
@@ -124,56 +119,56 @@ NFont: abstract class {
         In the event that the glyph is unsupported, a default size should be
         provided for that glyph.
     */
-    glyphSize: func (chr: Char) -> NSize {
-        if (fontData == null)
+    glyphSize: func (chr: ULong) -> NSize {
+        if (data == null)
             Exception new(This, "Font has not been loaded") throw()
-        return fontData glyphSize(chr)
+        return data glyphSize(chr)
     }
     
     /**
         Returns the relative horizontal position of the next character to
         follow the glyph without kerning.
     */
-    glyphAdvance: func (chr: Char) -> NSize {
-        if (fontData == null)
+    glyphAdvance: func (chr: ULong) -> NPoint {
+        if (data == null)
             Exception new(This, "Font has not been loaded") throw()
-        return fontData glyphAdvance(chr)
+        return data glyphAdvance(chr)
     }
     
     /**
         Returns the kerning for the given glyph pairing.
     */
-    glyphKerning: func (left, right: Char) -> NFloat {
-        if (fontData == null)
+    glyphKerning: func (left, right: ULong) -> NPoint {
+        if (data == null)
             Exception new(This, "Font has not been loaded") throw()
-        return fontData glyphKerning(left, right)
+        return data glyphKerning(left, right)
     }
     
     /**
         Returns the relative offset of the glyph from the baseline.
     */
-    glyphPosition: func (chr: Char) -> NPoint {
-        if (fontData == null)
+    glyphBearing: func (chr: ULong) -> NPoint {
+        if (data == null)
             Exception new(This, "Font has not been loaded") throw()
-        return fontData glyphPosition(chr)
+        return data glyphBearing(chr)
     }
     
     /**
         Returns what should be the minimum height of a line for the font.
     */
     lineHeight: func -> NFloat {
-        if (fontData == null)
+        if (data == null)
             Exception new(This, "Font has not been loaded") throw()
-        return fontData lineHeight()
+        return data lineHeight()
     }
     
     /**
         Returns the font's baseline.
     */
     baseLine: func -> NFloat {
-        if (fontData == null)
+        if (data == null)
             Exception new(This, "Font has not been loaded") throw()
-        return fontData baseLine()
+        return data baseLine()
     }
     
     /**
