@@ -23,7 +23,7 @@ NImage: class {
     frameCount: Int = 1
     
     init: func(url: String) {
-        this url = url clone()
+        this url = url ? url clone() : null
     }
     
     /**
