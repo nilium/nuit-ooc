@@ -213,12 +213,14 @@ NGUI: class {
             if (_mainWindow)
                 _mainWindow lostMainWindow()
             
-            if (_windows remove(window) && window superview() == null)
-                 _windows add(window)
+            if (window superview() == null && _windows remove(window))
+                _windows add(window)
+            else if (window superview() && window superview() subviews remove(window))
+                window superview() subviews add(window)
             
             _mainWindow = window
             // false movement to set off any other changes due to the change
-            // of main window
+            // of main window (change of over view, focal view, etc.)
             pushMouseMoveEvent(_mouse_cur)
         } else if (window == null) {
             if (_mainWindow)
@@ -228,6 +230,7 @@ NGUI: class {
 
             pushMouseMoveEvent(_mouse_cur)
         }
+        _focalView = null
     }
     
     mainWindow: func -> NWindow { _mainWindow }
