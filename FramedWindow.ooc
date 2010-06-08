@@ -7,6 +7,7 @@ import Renderer
 NFramedWindow: class extends NWindow {
     _dragging := 0
     _drag_point: NPoint
+    _caption := ""
     
     init: func (gui: NGUI, frame: NRect) {
         super(gui, frame)
@@ -74,5 +75,16 @@ NFramedWindow: class extends NWindow {
         bounds size height -= 1
         return bounds
         
+    }
+    
+    setCaption: func (._caption) {
+        if (_caption != null)
+            this _caption = _caption clone()
+        else
+            this _caption = _caption
+    }
+    
+    caption: func -> String {
+        _caption
     }
 }
