@@ -53,9 +53,14 @@ NFontData: abstract class {
     lineHeight: abstract func -> NFloat
     
     /**
-        Returns the font's baseline.
+        Returns the font's ascender.
     */
-    baseLine: abstract func -> NFloat
+    ascender: abstract func -> NFloat
+    
+    /**
+        Returns the font's ascender.
+    */
+    descender: abstract func -> NFloat
 }
 
 NFont: class {
@@ -91,7 +96,7 @@ NFont: class {
     weight: func -> NFloat {
         if (data == null)
             Exception new(This, "Font has not been loaded") throw()
-        return data baseLine()
+        return data weight()
     }
     
     /**
@@ -163,12 +168,21 @@ NFont: class {
     }
     
     /**
-        Returns the font's baseline.
+        Returns the font's ascender.
     */
-    baseLine: func -> NFloat {
+    ascender: func -> NFloat {
         if (data == null)
             Exception new(This, "Font has not been loaded") throw()
-        return data baseLine()
+        return data ascender()
+    }
+    
+    /**
+        Returns the font's ascender.
+    */
+    descender: func -> NFloat {
+        if (data == null)
+            Exception new(This, "Font has not been loaded") throw()
+        return data descender()
     }
     
     /**
