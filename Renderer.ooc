@@ -111,31 +111,24 @@ NRenderer: abstract class {
 	fillRect: abstract func (rect: NRect)
 	
 	/**
-	    Loads a single-frame image from the given :param:`url`.  URLs are
-	    assumed to be on the filesystem, but may point elsewhere.  There is no
-	    requirement to support any specific type of URL.
+	    Loads the given :param:`image`.
+	    
+	    :return: True if the image was successfully loaded, false if not.
+	    
+	    :note: You should not call this yourself.  Images handle automatic
+	    loading of themselves.
 	*/
-	loadImage: abstract func (url: String) -> NImage
+	loadImage: abstract func (image: NImage) -> Bool
 	
 	/**
-    	Loads a multi-frame image from the given :param:`url`.  URLs are
-        assumed to be on the filesystem, but may point elsewhere.  There is no
-        requirement to support any specific type of URL.
-        
-        Each frame is loaded left to right, top to bottom, from the image until
-        no more frames can be loaded.  This means that a 300x300 pixel image
-        with a 64x64 pixel frame size will have 16 frames and 44 pixels of
-        unused space at the bottom and right sides of the image.
-        
-        :param: frameSize The size of each frame.
-        :param: frameCount The total number of frames to load from the image.
+	    Loads the given :param:`font`.
+	    
+	    :return: True if the font was successfully loaded, false if not.
+	    
+	    :note: You should not call this yourself.  Like images, fonts will
+	    automatically load themselves.
 	*/
-	loadImageWithFrames: abstract func (url: String, frameSize: NSize, frameCount: Int) -> NImage
-	
-	/**
-	    Loads a font from the given :param:`url`.
-	*/
-	loadFont: abstract func (url: String, ptsize: Int, italic, bold: Bool) -> NFont
+	loadFont: abstract func (font: NFont) -> Bool
 	
 	/**
 	    Draws an :param:`image` in the area specified by :param:`inRect`.  The
@@ -154,7 +147,7 @@ NRenderer: abstract class {
 	
 	/**
 	    Draws :param:`text` at the specified :param:`point` using the given
-	    :param:`font`.  The point specifies the upper-left corner of the text.
+	    :param:`font`.  The point specifies the baseline.
 	*/
 	drawText: abstract func (text: String, font: NFont, point: NPoint)
 }

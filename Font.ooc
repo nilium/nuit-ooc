@@ -1,4 +1,6 @@
 import Types
+import GUI
+import Renderer
 
 NFontData: abstract class {
     /**
@@ -64,11 +66,17 @@ NFontData: abstract class {
 }
 
 NFont: class {
+    /** The renderer that loaded the font */
+    _renderer: NRenderer
+    
+    /** The GUI that will be using the font */
+    _gui: NGUI
+    
     /** The URL the font was/is to be loaded from */
     url: String = ""
     
-    /** The size of the font */
-    size: Int = 12
+    /** The pixel height of the font */
+    height: Int = 12
     
     /** Whether or not the font is bold */
     bold := false
@@ -81,12 +89,34 @@ NFont: class {
     */
     data: NFontData
     
-    init: func (url: String, =size, =bold, =italic) {
-        this url = url ? url clone() : null
+    __loaded?: func -> Bool {
+        (data && _renderer && _gui renderer() == _renderer)
     }
     
-    /** Returns the size of the font in pixels. */
-    size: func -> NFloat {size}
+    __load: func -> Bool {
+        ld := __loaded?()
+        if (!ld) {
+            rd := _gui renderer()
+            if (rd && rd loadFont(this)) {
+                _renderer = rd
+                return true
+            } else {
+                return false
+            }
+        }
+        return true
+    }
+    
+    init: func (=_gui, url: String, =height, =bold, =italic) {
+        if (_gui == null)
+            Exception new(This, "Cannot instantiate a font without a GUI instance") throw()
+        
+        this url = url ? url clone() : null
+        __load()
+    }
+    
+    /** Returns the height of the font in pixels. */
+    height: func -> Int { height }
     
     /**
         Returns the weight of the font (from 0.0 to 1.0).  Depending on the
@@ -94,28 +124,24 @@ NFont: class {
         cases.
     */
     weight: func -> NFloat {
-        if (data == null)
-            Exception new(This, "Font has not been loaded") throw()
-        return data weight()
+        __load() ? data weight() : 0.5
     }
     
     /**
         Returns whether or not the font is bold.
     */
-    isBold: func -> Bool {bold}
+    isBold: func -> Bool { bold }
     
     /**
         Returns whether or not the font is italicized.
     */
-    isItalic: func -> Bool {italic}
+    isItalic: func -> Bool { italic }
     
     /**
         Returns whether or not the font can render the given character.
     */
     supportsGlyph: func (chr: ULong) -> Bool {
-        if (data == null)
-            Exception new(This, "Font has not been loaded") throw()
-        return data supportsGlyph(chr)
+        __load() ? data supportsGlyph(chr) : false
     }
     
     /**
@@ -125,9 +151,7 @@ NFont: class {
         provided for that glyph.
     */
     glyphSize: func (chr: ULong) -> NSize {
-        if (data == null)
-            Exception new(This, "Font has not been loaded") throw()
-        return data glyphSize(chr)
+        __load() ? data glyphSize(chr) : NSize zero()
     }
     
     /**
@@ -135,60 +159,51 @@ NFont: class {
         follow the glyph without kerning.
     */
     glyphAdvance: func (chr: ULong) -> NPoint {
-        if (data == null)
-            Exception new(This, "Font has not been loaded") throw()
-        return data glyphAdvance(chr)
+        __load() ? data glyphAdvance(chr) : NPoint zero()
     }
     
     /**
         Returns the kerning for the given glyph pairing.
     */
     glyphKerning: func (left, right: ULong) -> NPoint {
-        if (data == null)
-            Exception new(This, "Font has not been loaded") throw()
-        return data glyphKerning(left, right)
+        __load() ? data glyphKerning(left, right) : NPoint zero()
     }
     
     /**
         Returns the relative offset of the glyph from the baseline.
     */
     glyphBearing: func (chr: ULong) -> NPoint {
-        if (data == null)
-            Exception new(This, "Font has not been loaded") throw()
-        return data glyphBearing(chr)
+        __load() ? data glyphBearing(chr) : NPoint zero()
     }
     
     /**
         Returns what should be the minimum height of a line for the font.
     */
     lineHeight: func -> NFloat {
-        if (data == null)
-            Exception new(This, "Font has not been loaded") throw()
-        return data lineHeight()
+        __load() ? data lineHeight() : 0.0
     }
     
     /**
         Returns the font's ascender.
     */
     ascender: func -> NFloat {
-        if (data == null)
-            Exception new(This, "Font has not been loaded") throw()
-        return data ascender()
+        __load() ? data ascender() : 0.0
     }
     
     /**
         Returns the font's ascender.
     */
     descender: func -> NFloat {
-        if (data == null)
-            Exception new(This, "Font has not been loaded") throw()
-        return data descender()
+        __load() ? data descender() : 0.0
     }
     
     /**
         Returns the size of the text for the given string.
     */
     sizeOfText: func (str: String) -> NSize {
+        if (!__load())
+            return NSize zero()
+        
         iter := str iterator()
         lastChr, chr: ULong
         lastChr = 0
