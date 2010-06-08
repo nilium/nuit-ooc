@@ -44,7 +44,7 @@ NView: class {
     _superview: NView = null
     
     /** A list of subviews contained by the view */
-    _subviews := LinkedList<NView> new()
+    subviews := LinkedList<NView> new()
     
     /** The view's frame */
     _frame: NRect
@@ -257,7 +257,7 @@ NView: class {
         if none is found.
     */
     findSubviewWithName: func (name: String, recurse: Bool) -> NView {
-        iterator := _subviews iterator()
+        iterator := subviews iterator()
         
         if (recurse) {
             subview: NView = null
@@ -298,7 +298,7 @@ NView: class {
         none is found.
     */
     findSubviewWithID: func (id: Int, recurse: Bool) -> NView {
-        iterator := _subviews iterator()
+        iterator := subviews iterator()
         
         if (recurse) {
             subview: NView = null
@@ -348,7 +348,7 @@ NView: class {
         if (view superview() != null)
             Exception new(This, "Cannot add a subview that already has a superview") throw()
         
-        _subviews add(view)
+        subviews add(view)
         view _superview = this
     }
     
@@ -363,7 +363,7 @@ NView: class {
     }
     
     _subviewWasRemoved: final func (subview: NView) {
-        _subviews remove(subview)
+        subviews remove(subview)
         subviewWasRemoved(subview)
     }
     
@@ -371,7 +371,7 @@ NView: class {
     subviewWasRemoved: func (subview: NView) {}
     
     /** Returns a LinkedList with all of the subviews of this view. */
-    subviews: final func -> LinkedList<NView> { _subviews clone() }
+    subviews: final func -> LinkedList<NView> { subviews clone() }
     
     /** Returns the view's superview */
     superview: final func -> NView { _superview }
@@ -448,7 +448,7 @@ NView: class {
         The point is assumed to be in the view's coordinate system already.
     */
     viewForPoint: func (point: NPoint) -> NView {
-        last := _subviews backIterator()
+        last := subviews backIterator()
         
         boundsOrigin := bounds() origin
         
@@ -495,7 +495,7 @@ NView: class {
         renderer setClippingRegion(NRect new(NPoint zero(), renderer screenSize()))
         renderer disableClipping()
         
-        iter := _subviews backward()
+        iter := subviews backward()
         while (iter hasNext()) {
             subview := iter next()
             
@@ -554,7 +554,7 @@ NView: class {
             renderer enableClipping()
         }
         
-        iter := _subviews backward()
+        iter := subviews backward()
         while (iter hasNext()) {
             subview := iter next()
             drawSubview(renderer, subview)
