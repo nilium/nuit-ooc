@@ -48,7 +48,7 @@ NGUI: class {
         
         if (_popup) {
             if (!_popup hidden?(false)) {
-                view = _popup viewForPoint(_popup convertPointFromScreen(_mouse_cur))
+                view = _popup viewForPoint(_popup convertPointFromScreen(position))
                 if (view == null) {
                     _popup hide()
                     _popup = null
@@ -66,7 +66,7 @@ NGUI: class {
                 if (window hidden?(false))
                     continue
             
-                view = window viewForPoint(window convertPointFromScreen(_mouse_cur))
+                view = window viewForPoint(window convertPointFromScreen(position))
             }
         }
         
@@ -89,7 +89,7 @@ NGUI: class {
             if (root instanceOf(NWindow))
                 setMainWindow(root as NWindow)
             
-            view mousePressed(button, view convertPointFromScreen(_mouse_cur))
+            view mousePressed(button, view convertPointFromScreen(position))
         }
     }
     
@@ -131,13 +131,15 @@ NGUI: class {
         __updateMousePosition(position)
         
         if (_mouseView && !(_mouseView hidden?(true) || _mouseView disabled?(true))) {
-            position = _mouseView convertPointFromScreen(position)
-            _mouseView mouseReleased(button, position)
+            pos := _mouseView convertPointFromScreen(position)
+            _mouseView mouseReleased(button, pos)
             
-            if (_overView && NRect new(NPoint zero(), _mouseView size()) contains(position)) {
+            if (_overView && !NRect new(NPoint zero(), _mouseView size()) \
+                                contains(_overView convertPointFromScreen(position))) {
                 _overView mouseLeft()
                 _overView = null
             }
+            _mouseView = null
         }
     }
     
