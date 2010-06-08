@@ -472,7 +472,8 @@ NView: class {
     viewForPoint: func (point: NPoint) -> NView {
         last := subviews backIterator()
         
-        boundsOrigin := bounds() origin
+        sansBounds := point
+        sansBounds subtract(bounds() origin)
         
         while (last hasPrev()) {
             subview := last prev()
@@ -480,13 +481,20 @@ NView: class {
             if (subview hidden?(false))
                 continue
             
-            trpoint := point
-            trpoint subtract(frame() origin)
-            trpoint subtract(boundsOrigin)
+            trpoint := sansBounds
+            trpoint subtract(subview frame() origin)
             
             subview = subview viewForPoint(trpoint)
-            if (subview)
-                return subview
+            if (subview) {
+                if (subview instanceOf(NWindow) || subview instanceOf(NPopup))
+                    return subview
+                
+                inter := subview frame()
+                inter origin add(bounds() origin)
+                inter = bounds() intersection(inter)
+                if (inter contains(point))
+                    return subview
+            }
         }
         
         frame := frame()
