@@ -5,6 +5,8 @@ import Renderer
 import EventHandler
 import Popup
 import Window
+import Drawable
+import Font
 
 /**
     Base class for all views in NUIT.
@@ -26,25 +28,64 @@ import Window
     explain how to draw views
 */
 NView: class {
+    /** The GUI instance the view uses */
+    _gui: NGUI
+    
+    /** The name of the view */
     _name: String = ""
+    
+    /** A tag object associated with the view */
     _tag: Object = null
+    
+    /** An ID number associated with the view */
     _id: Int = 0
+    
+    /** The view's superview/parent view */
     _superview: NView = null
-    _subviews: LinkedList<NView>
+    
+    /** A list of subviews contained by the view */
+    _subviews := LinkedList<NView> new()
+    
+    /** The view's frame */
     _frame: NRect
+    
+    /** The minimum size of the view */
     _min_size: NSize
+    
+    /** Flag to switch on/off use of the minimum size */
+    _has_min_size := false
+    
+    /** The maximum size of the view */
+    _max_size: NSize
+    
+    /** Flag to switch on/off use of the maximum size */
+    _has_max_size := false
+    
+    /** Flag to disable/enable the view (prevents input receipt) */
     _disabled := false
+    
+    /** Flag to hide/show the view (prevents drawing and input receipt) */
     _hidden := false
-    _eventhandlers: HashMap<String, LinkedList<NEventHandler>>
+    
+    /** A map of event handlers attached to the view */
+    _eventhandlers := HashMap<String, LinkedList<NEventHandler>> new(16)
+    
+    /** The font used by the view - do not access this directly when drawing */
+    _font: NFont = null
+    
+    /**
+        The drawable used by the view - do not access this directly when
+        drawing.
+    */
+    _drawable: NDrawable = null
 
 //////// Initializers
     
-    /** Initializes the view with a frame */
-    init: func (frame: NRect) {
-        _eventhandlers = HashMap<String, LinkedList<NEventHandler>> new(16)
-        _subviews = LinkedList<NView> new()
-        _min_size set(0.0, 0.0)
-        _frame set(0.0, 0.0, 0.0, 0.0)
+    /** Initializes the view its GUI instance and a frame */
+    init: func (=_gui, frame: NRect) {
+        if (_gui == null)
+            Exception new(This, "Cannot initialize a view without an NGUI instance") throw()
+        
         setFrame(frame)
     }
     
@@ -714,4 +755,31 @@ NView: class {
         if (handlers != null)
             handlers clear()
     }
+    
+//////// Drawables/fonts
+    
+    /**
+        Returns the font to be used by the view.
+        
+        :return: If the view has a font it's supposed to use, that font is
+        returned, otherwise it returns the result of :meth:`NGUI.viewFont`.
+        The result may be null, so checking for whether or not the font can be
+        used is important.
+    */
+    font: func -> NFont { _font ? _font : _gui viewFont() }
+    
+    /** 
+        Sets the font to be used by the view.
+        
+        As a rule of thumb, view subclasses should probably not have fonts
+        associated with them because there's no way to ensure distribution of a
+        given font, nor is there a way to guarantee a given renderer can load
+        the provided font.
+    */
+    setFont: func (=_font) {}
+    
+    drawable: func -> NDrawable { _drawable }
+    
+    setDrawable: func (=_drawable) {}
+    
 }

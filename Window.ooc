@@ -3,9 +3,7 @@ import Types
 import View
 
 NWindow: class extends NView {
-    init: func (frame: NRect) {
-        super(frame)
-    }
+    init: super func
     
     canBecomeMainWindow?: func -> Bool {true}
     
@@ -13,6 +11,6 @@ NWindow: class extends NView {
     lostMainWindow: func {}
     
     isMainWindow?: func -> Bool {
-        NGUI activeInstance() mainWindow() == this
+        _gui mainWindow() == this
     }
 }

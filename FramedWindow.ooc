@@ -1,21 +1,23 @@
+import GUI
 import Drawable
 import Types
 import Window
 import Renderer
 
 NFramedWindow: class extends NWindow {
-    _drawable: NDrawable = null
     _dragging := 0
     _drag_point: NPoint
     
-    init: func (frame: NRect) {
-        super(frame)
+    init: func (gui: NGUI, frame: NRect) {
+        super(gui, frame)
+        setMinimumSize(NSize new(40.0, 40.0))
     }
     
     draw: func (renderer: NRenderer) {
-        if (_drawable != null) {
+        drw := drawable()
+        if (drw != null) {
             frame: Int = (isMainWindow?() ? 0 : 1)
-            _drawable drawInRect(renderer, NRect new(NPoint zero(), size()), frame)
+            drw drawInRect(renderer, NRect new(NPoint zero(), size()), frame)
         }
     }
     

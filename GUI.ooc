@@ -4,12 +4,12 @@ import View
 import Renderer
 import Window
 import Popup
+import Font
+import Drawable
 
 NGUI: class {
-    /** The active NGUI instance **/
-    __instance: static NGUI = null
     /** The renderer to be used by the GUI to handle drawing **/
-    _renderer: NRenderer
+    _renderer: NRenderer = null
     
     /** The current mouse position as of the last mouse movement update **/
     _mouse_cur: NPoint
@@ -30,28 +30,11 @@ NGUI: class {
     /** The active popup view */
     _popup: NPopup = null
     
-    _windows: LinkedList<NWindow>
+    /** A list of root windows managed by this GUI instance */
+    _windows := LinkedList<NWindow> new()
     
-    activeInstance: static func -> NGUI {
-        if (__instance == null)
-            return NGUI new()
-        return __instance
-    }
-    
-    init: func {
-        __instance = this
-        _windows = LinkedList<NWindow> new()
-    }
-    
-    makeActive: func {
-        __instance = this
-    }
-    
-    makeInactive: func {
-        if (__instance == this) {
-            __instance = null
-        }
-    }
+    /** The default font used by views */
+    _viewFont: NFont = null
     
     __updateMousePosition: func (pos: NPoint) {
         if (pos != _mouse_cur)
@@ -158,6 +141,8 @@ NGUI: class {
         }
     }
     
+    renderer: func -> NRenderer { _renderer }
+    
     /**
         Sets the renderer used by the GUI.
     */
@@ -244,5 +229,9 @@ NGUI: class {
     }
     
     mainWindow: func -> NWindow { _mainWindow }
+    
+    viewFont: func -> NFont { _viewFont }
+    
+    setViewFont: func (=_viewFont) {}
     
 }
