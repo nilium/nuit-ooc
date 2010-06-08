@@ -5,7 +5,7 @@ NEventHandler: abstract class {
     fire: abstract func (sender: NView, event: String, data: HashMap<String, Object>)
 }
 
-NClosureEventHandler: class {
+NClosureEventHandler: class extends NEventHandler {
     _closure: Func (NView, String, HashMap<String, Object>)
     
     init: func (=_closure) {}
