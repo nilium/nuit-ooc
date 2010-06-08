@@ -12,6 +12,7 @@ NFramedWindow: class extends NWindow {
     init: func (gui: NGUI, frame: NRect) {
         super(gui, frame)
         setMinimumSize(NSize new(40.0, 40.0))
+        setMinimumSizeEnabled(true)
     }
     
     draw: func (renderer: NRenderer) {
