@@ -117,7 +117,10 @@ NView: class {
     
     /** Set the view's frame */
     setFrame: func (frame: NRect) {
-        frame size = NSize max(frame size, _min_size)
+        if (_has_min_size)
+            frame size = NSize max(frame size, _min_size)
+        if (_has_max_size)
+            frame size = NSize min(frame size, _max_size)
         _frame = frame
     }
     
@@ -232,6 +235,25 @@ NView: class {
         _min_size = NSize max(NSize zero(), min_size)
     }
     
+    /** Returns the maximum size of the view */
+    maximumSize: func -> NSize { _max_size }
+    
+    /** Sets the maximum size of the view */
+    setMaximumSize: func (max_size: NSize) {
+        _max_size = NSize max(NSize zero(), max_size)
+    }
+    
+    /** Returns whether or not a minimum size is used */
+    minimumSizeEnabled: func -> Bool { _has_min_size }
+    
+    /** Sets whether or not a minimum size is used */
+    setMinimumSizeEnabled: func (=_has_min_size) {}
+    
+    /** Returns whether or not a minimum size is used */
+    maximumSizeEnabled: func -> Bool { _has_max_size }
+    
+    /** Sets whether or not a minimum size is used */
+    setMaximumSizeEnabled: func (=_has_max_size) {}
     
     /**
         Returns whether or not this view clips its subviews inside its bounds.
