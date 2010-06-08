@@ -72,6 +72,8 @@ NSize: cover {
 	}
 	
 	toPoint: func -> NPoint { NPoint new(width, height) }
+	
+	toRect: func -> NRect { NRect new(NPoint zero(), this) }
 }
 
 operator == (left, right: NSize) -> Bool {
@@ -141,6 +143,8 @@ NPoint: cover {
 	}
 	
 	toSize: func -> NSize { NSize new(x, y) }
+	
+	toRect: func -> NRect { NRect new(this, NSize zero()) }
 }
 
 operator == (left, right: NPoint) -> Bool {
