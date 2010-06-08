@@ -18,8 +18,25 @@ NFramedWindow: class extends NWindow {
     draw: func (renderer: NRenderer) {
         drw := drawable()
         if (drw != null) {
+            // Only draw the title and shadow if we have a frame to begin with
+            
             frame: Int = (isMainWindow?() ? 0 : 1)
             drw drawInRect(renderer, NRect new(NPoint zero(), size()), frame)
+            
+            font := font()
+            if (font && _caption) {
+                renderer saveState()
+                origin := renderer drawingOrigin()
+                origin x += 2
+                origin y += 2
+                renderer enableClipping()
+                renderer clipRegion(NRect new(origin, NSize new(size() width-4, 22.0)))
+                sz := font sizeOfText(_caption)
+                asc := font ascender()
+                pos := NPoint new(2.0 + (((size() width - 4) - sz width)*0.5) floor(), 2.0 + (8 - (sz height*0.5) floor()) + asc)
+                renderer drawText(_caption, font, pos)
+                renderer restoreState()
+            }
         }
     }
     
