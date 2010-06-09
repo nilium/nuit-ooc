@@ -107,7 +107,12 @@ NView: class {
     
     /** Get the size of the view's frame */
     size: final func -> NSize {
-        return frame() size
+        frame() size
+    }
+    
+    /** Get the origin of the view's frame */
+    origin: final func -> NPoint {
+        frame() origin
     }
     
     /** Get the view's frame */
