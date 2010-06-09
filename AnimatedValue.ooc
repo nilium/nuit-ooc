@@ -37,8 +37,13 @@ NAnimatedValue: class {
     
     /** Returns the progress of the animation, clamped 0.0 to 1.0 */
     progress: final func -> Double {
+        if (!__running && __duration <= __elapsed)
+            return 1.0
         delta := __durationOverOne * (__running ? (Time millisec() - __start) : __elapsed)
-        if (1.0 < delta) return 1.0
+        if (1.0 < delta) {
+            stop()
+            return 1.0
+        }
         if (delta < 0.0) return 0.0
         return delta
     }
