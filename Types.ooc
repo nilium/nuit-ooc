@@ -84,20 +84,6 @@ operator != (left, right: NSize) -> Bool {
     !(left == right)
 }
 
-operator += (left: NSize@, right: NSize) -> NSize@ {
-	r: NSize = left
-	r add(right)
-	left = r
-	return left&
-}
-
-operator -= (left: NSize@, right: NSize) -> NSize@ {
-	r: NSize = left
-	r subtract(right)
-	left = r
-	return left&
-}
-
 NPoint: cover {
 	x: NFloat = 0.0
 	y: NFloat = 0.0
@@ -153,20 +139,6 @@ operator == (left, right: NPoint) -> Bool {
 
 operator != (left, right: NPoint) -> Bool {
     !(left == right)
-}
-
-operator += (left: NPoint@, right: NPoint) -> NSize@ {
-	r: NPoint = left
-	r add(right)
-	left = r
-	return left&
-}
-
-operator -= (left: NPoint@, right: NPoint) -> NSize@ {
-	r: NPoint = left
-	r subtract(right)
-	left = r
-	return left&
 }
 
 /* 
