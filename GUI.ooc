@@ -167,7 +167,7 @@ NGUI: class {
             if (window hidden?(false))
                 continue
             
-            _renderer setDrawingOrigin(window frame() origin)
+            _renderer setDrawingOrigin(window origin())
             
             _renderer saveState()
             window draw(_renderer)
