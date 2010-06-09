@@ -493,9 +493,7 @@ NView: class {
             }
         }
         
-        frame := frame()
-        frame origin set(0.0, 0.0)
-        if (frame contains(point))
+        if (size() contains(point))
             return this
         
         return null
