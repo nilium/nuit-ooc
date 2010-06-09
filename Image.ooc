@@ -31,7 +31,7 @@ NImage: class {
     frameCount: Int = 1
     
     __loaded?: func -> Bool {
-        (data && _renderer && _gui renderer() == _renderer)
+        (data != null && _renderer != null && _gui renderer() == _renderer)
     }
     
     __load: func -> Bool {
