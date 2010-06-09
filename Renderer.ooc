@@ -23,6 +23,12 @@ NRenderer: abstract class {
     release: abstract func
     
     /**
+        Forces to the GUI to immediately dispose of any and all resources it is
+        responsible for (such as OpenGL textures).
+    */
+    dispose: func {}
+    
+    /**
         Saves all state changes to later be restored.  All calls to
         :meth:`saveState` should have a corresponding :meth:`restoreState`
         call to potential memory leaks and other mishaps.
