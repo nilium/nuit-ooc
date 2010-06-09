@@ -381,12 +381,8 @@ NView: class {
         
         sv := _superview
         _superview = null
-        sv _subviewWasRemoved(this)
-    }
-    
-    _subviewWasRemoved: final func (subview: NView) {
-        subviews remove(subview)
-        subviewWasRemoved(subview)
+        sv subviews remove(this)
+        sv subviewWasRemoved(this)
     }
     
     /** Notifies the view that one of its subviews has been removed */
