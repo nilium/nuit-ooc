@@ -8,6 +8,16 @@ import Renderer
     the methods of NImageData.
 */
 NImageData: abstract class {
+    _renderer: NRenderer
+    
+    init: func (=_renderer) {
+        if (_renderer == null)
+            Exception new(This, "Cannot initialize image data with a null renderer") throw()
+    }
+    
+    /** Returns the renderer associated with this image data */
+    renderer: func -> NRenderer { _renderer }
+    
     /**
         Gets the actual size of the image in pixels.
     */
@@ -15,8 +25,6 @@ NImageData: abstract class {
 }
 
 NImage: class {
-    /** The renderer that last loaded the image */
-    _renderer: NRenderer
     /** The GUI that will be using the image */
     _gui: NGUI
     /** The url the image data was loaded from */
@@ -31,19 +39,17 @@ NImage: class {
     frameCount: Int = 1
     
     __loaded?: func -> Bool {
-        (data != null && _renderer != null && _gui renderer() == _renderer)
+        (data != null && _gui renderer() == data renderer())
     }
     
     __load: func -> Bool {
         ld := __loaded?()
         if (!ld) {
             rd := _gui renderer()
-            if (rd && rd loadImage(this)) {
-                _renderer = rd
+            if (rd && rd loadImage(this))
                 return true
-            } else {
+            else
                 return false
-            }
         }
         return true
     }
