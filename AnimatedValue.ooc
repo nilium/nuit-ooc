@@ -39,7 +39,7 @@ NAnimatedValue: class {
     progress: final func -> Double {
         if (!__running && __duration <= __elapsed)
             return 1.0
-        delta := __durationOverOne * (__running ? (Time millisec() - __start) : __elapsed)
+        delta := __durationOverOne * (__running ? (Time runTime - __start) : __elapsed)
         if (1.0 < delta) {
             stop()
             return 1.0
@@ -67,7 +67,7 @@ NAnimatedValue: class {
     
     /** Starts/resumes the animator. */
     start: final func {
-        __start = Time millisec() - __elapsed
+        __start = Time runTime - __elapsed
         __running = true
     }
     
@@ -78,7 +78,7 @@ NAnimatedValue: class {
     stop: final func {
         if (!__running)
             return
-        __elapsed = Time millisec() - __start
+        __elapsed = Time runTime - __start
         __running = false
     }
     
