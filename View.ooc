@@ -576,7 +576,7 @@ NView: class {
         
         Internal use only.
     */
-    drawSubviews: func (renderer: NRenderer) {        
+    drawSubviews: func (renderer: NRenderer) {
         renderer translateDrawingOrigin(bounds() origin)
         
         if (clipsSubviews()) {
