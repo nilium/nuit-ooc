@@ -397,12 +397,25 @@ NView: class {
     /** Returns the root view of this view's hierarchy */
     root: func -> NView {
         rv := this
-        sv := rv superview()
-        while (sv != null) {
-            rv = sv
+        while (rv superview() != null)
+            rv = rv superview()
+        return rv
+    }
+    
+    /**
+        Returns the view's window.
+        
+        If the view in question is a root window, this will return null.  If
+        the view is a subwindow, the superwindow is returned.
+    */
+    window: func -> NWindow {
+        sv := superview()
+        while (sv) {
+            if (sv instanceOf(NWindow))
+                return sv as NWindow
             sv = sv superview()
         }
-        return rv
+        return null
     }
 
 //////// Working with view coordinates
