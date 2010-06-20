@@ -14,7 +14,12 @@ NImageScaling: enum {
 NImageDrawable: class extends NDrawable {
     image: NImage
     
-    scaling := NImageScaling none
+    scaling := NImageScaling fillAspect
+    
+    init: func ~defaultScaling (=image) {
+        init(image, NImageScaling fillAspect)
+    }
+    init: func (=image, =scaling) {}
     
     drawInRect: func (renderer: NRenderer, rect: NRect, frame: Int) {
         imageSize := image frameSize()
