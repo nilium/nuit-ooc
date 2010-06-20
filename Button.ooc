@@ -1,11 +1,15 @@
-import Types, GUI, View, Renderer, Drawable
+import Types, GUI, View, Renderer, Drawable, AnimatedValue
 
 NButtonPressedEvent := const "ButtonPressedEvent"
 
 NButton: class extends NView {
     _caption := ""
+    
     _pressed := false
     _over := false
+    
+    _pressFade := NAnimatedValue new(0.0, 0.0, 80, true)
+    _hiliteFade := NAnimatedValue new(0.0, 0.0, 80, true)
     
     init: super func
     
@@ -23,17 +27,34 @@ NButton: class extends NView {
     mousePressed: func (button: Int, position: NPoint) {
         if (button == 1) {
             _pressed = true
-            _over = true
+            _pressFade setInitial(_pressFade value()).
+                        setTarget(1.0).
+                        restart()
         }
     }
     
     mouseMoved: func (pos: NPoint, delta: NPoint) {
-        _over = bounds() contains(pos)
+        if (_pressed) {
+            over := size() contains(pos)
+            if (over != _over) {
+                _pressFade setInitial(_pressFade value())
+                if (_pressed && over)
+                    _pressFade setTarget(1.0)
+                else
+                    _pressFade setTarget(0.0)
+                _pressFade restart()
+            }
+            _over = over
+        }
     }
     
     mouseReleased: func (button: Int, pos: NPoint) {
         if (button == 1 && _pressed) {
             _pressed = false
+            _pressFade setInitial(_pressFade value()).
+                        setTarget(0.0).
+                        restart()
+            
             if (_over) {
                 __onPress()
             }
@@ -42,19 +63,36 @@ NButton: class extends NView {
     
     mouseEntered: func {
         _over = true
+        _hiliteFade setInitial(_hiliteFade value()).
+                    setTarget(1.0).
+                    restart()
     }
     
     mouseLeft: func {
         _over = false
+        _hiliteFade setInitial(_hiliteFade value()).
+                    setTarget(0.0).
+                    restart()
     }
     
-    draw: func (renderer: NRenderer) {
+    drawButton: func (renderer: NRenderer, inRect: NRect) {
         drw := drawable()
         if (drw) {
             drw drawInRect(renderer, size() toRect(), 3*(disabled?(true) as Int))
-            if (_over||_pressed)
-                drw drawInRect(renderer, size() toRect(), _over as Int + _pressed)
+            
+            pressedAlpha := _pressFade value() as NFloat
+            overAlpha := (_hiliteFade value() * (1.0 - pressedAlpha)) as NFloat
+            
+            renderer setFillColor(NColor white(overAlpha))
+            drw drawInRect(renderer, size() toRect(), 1)
+            
+            renderer setFillColor(NColor white(pressedAlpha))
+            drw drawInRect(renderer, size() toRect(), 2)
         }
+    }
+    
+    draw: func (renderer: NRenderer) {
+        drawButton(renderer, size() toRect())
         
         font := font()
         if (font && _caption) {
@@ -68,6 +106,7 @@ NButton: class extends NView {
             pos x = pos x floor()
             pos y = pos y floor()
             
+            renderer setFillColor(NColor white(1.0))
             renderer drawText(_caption, font, pos)
         }
     }
