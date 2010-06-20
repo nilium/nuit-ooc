@@ -117,7 +117,6 @@ NFont: class {
             Exception new(This, "Cannot instantiate a font without a GUI instance") throw()
         
         this url = url ? url clone() : null
-        __load()
     }
     
     /** Returns the height of the font in pixels. */

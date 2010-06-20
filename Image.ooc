@@ -54,20 +54,19 @@ NImage: class {
         return true
     }
     
-    init: func(=_gui, url: String) {
+    init: func(=_gui, .url) {
         if (_gui == null)
             Exception new(This, "Cannot instantiate a font without a GUI instance") throw()
         
         this url = url ? url clone() : null
-        __load()
     }
     
-    init: func ~framed (=_gui, url: String, =frameSize, =frameCount) {
+    init: func ~framed (=_gui, .url, =frameSize, =frameCount) {
         if (_gui == null)
             Exception new(This, "Cannot instantiate a font without a GUI instance") throw()
+        
         _framedImage = true
         this url = url ? url clone() : null
-        __load()
     }
     
     /**
