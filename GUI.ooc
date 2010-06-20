@@ -7,6 +7,13 @@ import Popup
 import Font
 import Drawable
 
+NWindowPosition: enum {
+    raised = 0
+    raisedMain = 1
+    belowMain = -1
+    belowAll = -2
+}
+
 NGUI: class {
     /** The renderer to be used by the GUI to handle drawing **/
     _renderer: NRenderer = null
@@ -235,8 +242,41 @@ NGUI: class {
     
     mainWindow: func -> NWindow { _mainWindow }
     
+    setPopup: func (popup: NPopup) {
+        if (_popup != popup) {
+            if (_popup) {
+                _popup hide()
+            }
+            _popup = popup
+            if (popup) {
+                popup show()
+            }
+            pushMouseMoveEvent(_mouse_cur)
+        }
+    }
+    
+    popup: func -> NPopup { _popup }
+    
     viewFont: func -> NFont { _viewFont }
     
     setViewFont: func (=_viewFont) {}
+    
+    addWindow: func ~raisedMain (window: NWindow) {
+        addWindow(window, NWindowPosition raisedMain)
+    }
+    
+    addWindow: func (window: NWindow, position: NWindowPosition) {
+        if (position == NWindowPosition belowAll) {
+            _windows add(0, window)
+        } else if (position == NWindowPosition belowMain) {
+            _windows add(_windows size()-2, window)
+        } else {
+            _windows add(window)
+        }
+        
+        if (position == NWindowPosition raisedMain) {
+            setMainWindow(window)
+        }
+    }
     
 }
