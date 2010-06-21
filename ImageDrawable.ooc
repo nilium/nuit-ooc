@@ -25,14 +25,13 @@ NImageDrawable: class extends NDrawable {
         imageSize := image frameSize()
         match scaling {
             case NImageScaling none =>
-                rect size width = NFloat min(imageSize width, rect size width)
-                rect size height = NFloat min(imageSize height, rect size height)
+                rect size = rect size min(imageSize)
             
             case NImageScaling fillWidth =>
-                rect size height = NFloat min(imageSize height, rect size height)
+                rect size height = rect size height min(imageSize height)
             
             case NImageScaling fillHeight =>
-                rect size width = NFloat min(imageSize width, rect size width)
+                rect size width = rect size width min(imageSize width)
             
             case NImageScaling fill =>
                 renderer drawImage(image, frame, rect)

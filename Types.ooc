@@ -3,13 +3,17 @@ include math
 NFloat: cover from float extends Float {
 	
 	/* these are here because I typically don't trust the SDK very much at all */
-	min: static extern(fminf) func (This, This) -> This
-	max: static extern(fmaxf) func (This, This) -> This
+	min: extern(fminf) func (This) -> This
+	max: extern(fmaxf) func (This) -> This
 	abs: extern(fabsf) func -> This
 	floor: extern(floorf) func -> This
 	ceil: extern(ceilf) func -> This
 	mod: extern(fmodf) func(y: This) -> This
 	EPSILON: static const extern(FLT_EPSILON) This
+	
+	clampedTo: func (_min, _max: This) -> This {
+	    this max(_min) min(_max)
+	}
 	
 	/**
 	    Determines whether or not two NFloats are equal based on whether or
@@ -32,14 +36,14 @@ NSize: cover {
 	    new(0.0, 0.0)
 	}
 	
-    min: static func (left, right: This) -> This {
-		new(NFloat min(left width, right width),
-		    NFloat min(left height, right height))
+    min: func (right: This) -> This {
+		new(width min(right width),
+		    height min(right height))
 	}
 	
-	max: static func (left, right: This) -> This {
-		new(NFloat max(left width, right width),
-		    NFloat max(left height, right height))
+	max: func (right: This) -> This {
+		new(width max(right width),
+		    height max(right height))
 	}
 	
 	add: func@ (other: This) {
@@ -94,14 +98,14 @@ NPoint: cover {
 	    new(0.0, 0.0)
 	}
 	
-	min: static func (left, right: This) -> This {
-		new(NFloat min(left x, right x),
-		    NFloat min(left y, right y))
+	min: func (right: This) -> This {
+		new(x min(right x),
+		    y min(right y))
 	}
 	
-	max: static func (left, right: This) -> This {
-		new(NFloat max(left x, right x),
-		    NFloat max(left y, right y))
+	max: func (right: This) -> This {
+		new(x max(right x),
+		    y max(right y))
 	}
 	
 	add: func@ (other: This) {
@@ -163,9 +167,9 @@ NRect: cover {
 	intersection: func (other: NRect) -> This {
 		intersection: This
 		
-		intersection origin = NPoint max(origin, other origin)
-		intersection size width = NFloat max(NFloat min(right(), other right()) - intersection left(), 0.0)
-		intersection size height = NFloat max(NFloat min(bottom(), other bottom()) - intersection top(), 0.0)
+		intersection origin = origin max(other origin)
+		intersection size width = (right() min(other right()) - intersection left()) max(0.0)
+		intersection size height = (bottom() min(other bottom()) - intersection top()) max(0.0)
 		
 		return intersection
 	}
