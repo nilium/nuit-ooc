@@ -5,7 +5,7 @@ NCheckbox: class extends NButton {
     
     init: super func
     
-    _firePressEvent: func {
+    _buttonAction: func {
         setChecked(!checked())
     }
     

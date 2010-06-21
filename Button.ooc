@@ -111,16 +111,24 @@ NButton: class extends NView {
         }
     }
     
+    // override for different actions occurring when the button is pressed.
+    // this is some bit of code that must always occur when the button is
+    // pressed
+    _buttonAction: func {}
+    
     // override for different event names in button subclasses
-    _firePressEvent: func {
+    __firePressEvent: func {
         _fireEvent(NButtonPressedEvent, null)
     }
     
     __onPress: func {
-        _firePressEvent()
+        _buttonAction()
         onPress()
+        __firePressEvent()
     }
     
-    // for others to override
+    // user override
+    // similar to _buttonAction, except this can be overridden without
+    // modifying the core functionality of the button
     onPress: func {}
 }
