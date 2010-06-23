@@ -103,7 +103,7 @@ NButton: class extends NView {
             pos subtract(sz toPoint())
             pos x *= 0.5
             pos y *= 0.5
-            pos y += font ascender()
+            pos y += font ascender() + font descender() + _pressFade value()
             // something to note: when drawing text, floor the position
             pos x = pos x floor()
             pos y = pos y floor()
