@@ -78,6 +78,12 @@ NView: class {
         drawing.
     */
     _drawable: NDrawable = null
+    
+    /** The top-left corner of the view's bounds */
+    _bounds_topLeft: NSize
+    
+    /** The bottom-right corner of the view's bounds */
+    _bounds_bottomRight: NSize
 
 //////// Initializers
     
@@ -133,9 +139,22 @@ NView: class {
         Get the view's bounds
     */
     bounds: func -> NRect {
-        result := frame()
-        result origin set(0.0, 0.0)
-        return result
+        bnds := size() toRect()
+        bnds origin = _bounds_topLeft toPoint()
+        bnds size subtract(_bounds_topLeft)
+        bnds size subtract(_bounds_bottomRight)
+        return bnds
+    }
+    
+    setBounds: func (=_bounds_topLeft, =_bounds_bottomRight) {}
+    
+    setBounds: final func ~withRect (rect: NRect) {
+        size := size()
+        topLeft := NSize new(rect left(), rect top())
+        bottomRight := NSize new(size width - rect left(), size height - rect bottom())
+        setBounds(topLeft, bottomRight)
+    }
+    
     }
     
     /**
@@ -231,34 +250,33 @@ NView: class {
     */
     performLayout: func {}
     
+    /** Returns the min size of the view */
+    minSize: func -> NSize { _min_size }
     
-    /** Returns the minimum size of the view */
-    minimumSize: func -> NSize { _min_size }
-    
-    /** Sets the minimum size of the view */
-    setMinimumSize: func (min_size: NSize) {
+    /** Sets the min size of the view */
+    setMinSize: func (min_size: NSize) {
         _min_size = NSize max(NSize zero(), min_size)
     }
     
-    /** Returns the maximum size of the view */
-    maximumSize: func -> NSize { _max_size }
+    /** Returns the max size of the view */
+    maxSize: func -> NSize { _max_size }
     
-    /** Sets the maximum size of the view */
-    setMaximumSize: func (max_size: NSize) {
+    /** Sets the max size of the view */
+    setMaxSize: func (max_size: NSize) {
         _max_size = NSize max(NSize zero(), max_size)
     }
     
-    /** Returns whether or not a minimum size is used */
-    minimumSizeEnabled: func -> Bool { _has_min_size }
+    /** Returns whether or not a min size is used */
+    minSizeEnabled: func -> Bool { _has_min_size }
     
-    /** Sets whether or not a minimum size is used */
-    setMinimumSizeEnabled: func (=_has_min_size) {}
+    /** Sets whether or not a min size is used */
+    setMinSizeEnabled: func (=_has_min_size) {}
     
-    /** Returns whether or not a minimum size is used */
-    maximumSizeEnabled: func -> Bool { _has_max_size }
+    /** Returns whether or not a min size is used */
+    maxSizeEnabled: func -> Bool { _has_max_size }
     
-    /** Sets whether or not a minimum size is used */
-    setMaximumSizeEnabled: func (=_has_max_size) {}
+    /** Sets whether or not a min size is used */
+    setMaxSizeEnabled: func (=_has_max_size) {}
     
     /**
         Returns whether or not this view clips its subviews inside its bounds.
