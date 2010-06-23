@@ -49,7 +49,7 @@ NNinePatchDrawable: class extends NDrawable {
             if (rb)
                 renderer drawSubimage(image, frame, NRect new(lw+sw, 0.0, rw, th), NRect new(rect x() + dw + lws, rect y(), rws, ths))
             
-            rect origin y += th
+            rect origin y += ths
         }
         
         if (lb)
