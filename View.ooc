@@ -704,7 +704,8 @@ NView: class {
 //////// Events & event handling
     
     __pointToSuperview: final func (point: NPoint) -> NPoint {
-        if (_superview) point add(frame() origin) .add(_superview bounds() origin)
+        point add(frame() origin)
+        point add(_superview bounds() origin)
         return point
     }
     
