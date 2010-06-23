@@ -93,7 +93,10 @@ NView: class {
             Exception new(This, "Cannot initialize a view without an NGUI instance") throw()
         
         setFrame(frame)
+        _loadDefaultDrawables()
     }
+    
+    _loadDefaultDrawables: func {}
     
 //////// Basic properties
 
