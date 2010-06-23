@@ -566,14 +566,16 @@ NView: class {
             
             subview = subview viewForPoint(trpoint)
             if (subview) {
-                if (subview instanceOf(NWindow) || subview instanceOf(NPopup))
+                if (subview instanceOf(NWindow) || subview instanceOf(NPopup)) {
                     return subview
+                }
                 
                 inter := subview frame()
-                inter origin add(bounds() origin)
-                inter = bounds() intersection(inter)
-                if (inter contains(point))
+                inter origin = subview convertPointToView(NPoint zero(), this)
+                
+                if (bounds() intersects(inter) && bounds() intersection(inter) contains(point)) {
                     return subview
+                }
             }
         }
         
