@@ -554,14 +554,10 @@ NView: class {
         The point is assumed to be in the view's coordinate system already.
     */
     viewForPoint: func (point: NPoint) -> NView {
-        last := subviews backIterator()
-        
         sansBounds := point
         sansBounds subtract(bounds() origin)
         
-        while (last hasPrev()) {
-            subview := last prev()
-            
+        for (subview: NView in subviews backward()) {
             if (subview hidden?(false))
                 continue
             
@@ -606,10 +602,7 @@ NView: class {
         renderer disableClipping()
         renderer translateDrawingOrigin(bounds() origin)
         
-        iter := subviews backward()
-        while (iter hasNext()) {
-            subview := iter next()
-            
+        for (subview in subviews) {
             // this is bad practice, but it works
             if (subview hidden?(false) || subview instanceOf(NPopup))
                 continue
@@ -657,11 +650,8 @@ NView: class {
             renderer clipRegion(clip)
         }
         
-        iter := subviews backward()
-        while (iter hasNext()) {
-            subview := iter next()
+        for (subview in subviews)
             drawSubview(renderer, subview)
-        }
     }
     
     /**
@@ -825,9 +815,8 @@ NView: class {
     _fireEvent: func (event: String, data: HashMap<String, Object>) {
         handlers := _eventhandlers get(event) as LinkedList<NEventHandler>
         if (handlers != null) {
-            iter := handlers iterator()
-            while (iter hasNext())
-                iter next() fire(this, event, data)
+            for(handler in handlers)
+                handler fire(this, event, data)
         }
     }
     
