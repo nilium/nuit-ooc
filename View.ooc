@@ -592,7 +592,12 @@ NView: class {
         
         By default, does nothing.
     */
-    draw: func (renderer: NRenderer) {}
+    draw: func (renderer: NRenderer) {
+        drw := drawable()
+        if (drw) {
+            drw drawInRect(renderer, size() toRect(), 0)
+        }
+    }
     
     /**
         Draws all of a view's subviews.
