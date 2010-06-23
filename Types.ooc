@@ -30,6 +30,11 @@ NSize: cover {
 	width: NFloat = 0.0
 	height: NFloat = 0.0
 	
+	init: func@ ~u (u: NFloat) {
+	    width = u
+	    height = u
+    }
+	
 	init: func@ (=width, =height) {}
 	
 	zero: static func -> This {
@@ -78,6 +83,10 @@ NSize: cover {
 	toPoint: func -> NPoint { NPoint new(width, height) }
 	
 	toRect: func -> NRect { NRect new(NPoint zero(), this) }
+	
+	toString: func -> String {
+		"%f, %f" format(width, height)
+	}
 }
 
 operator == (left, right: NSize) -> Bool {
@@ -91,6 +100,11 @@ operator != (left, right: NSize) -> Bool {
 NPoint: cover {
 	x: NFloat = 0.0
 	y: NFloat = 0.0
+	
+	init: func@ ~u (u: NFloat) {
+	    x = u
+	    y = u
+	}
 	
 	init: func@ (=x, =y) {}
 	
@@ -135,6 +149,10 @@ NPoint: cover {
 	toSize: func -> NSize { NSize new(x, y) }
 	
 	toRect: func -> NRect { NRect new(this, NSize zero()) }
+	
+	toString: func -> String {
+		"%f, %f" format(x, y)
+	}
 }
 
 operator == (left, right: NPoint) -> Bool {
@@ -239,6 +257,10 @@ NRect: cover {
 	contains: func (point: NPoint) -> Bool {
 		return (left() <= point x() && point x() <= right() && top() <= point y() && point y() <= bottom())
 	}
+	
+	toString: func -> String {
+		"%f, %f, %f, %f" format(x(), y(), width(), height())
+	}
 }
 
 operator == (left, right: NRect) -> Bool {
@@ -260,6 +282,13 @@ NColor: cover {
     black: static func ~opaque -> This { new(0.0, 0.0, 0.0) }
     white: static func (alpha: NFloat) -> This { new(1.0, 1.0, 1.0, alpha) }
     white: static func ~opaque -> This { new(1.0, 1.0, 1.0) }
+    
+    init: func@ ~blackOpaque {
+        red = 0.0
+        green = 0.0
+        blue = 0.0
+        alpha = 1.0
+    }
     
     init: func@ ~opaque (=red, =green, =blue) {
         alpha = 1.0
