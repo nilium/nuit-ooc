@@ -78,6 +78,7 @@ NButton: class extends NView {
     drawButton: func (renderer: NRenderer, inRect: NRect) {
         drw := drawable()
         if (drw) {
+            renderer saveState()
             drw drawInRect(renderer, size() toRect(), 3*(disabled?(true) as Int))
             
             pressedAlpha := _pressFade value() as NFloat
@@ -88,6 +89,7 @@ NButton: class extends NView {
             
             renderer setFillColor(NColor white(pressedAlpha))
             drw drawInRect(renderer, size() toRect(), 2)
+            renderer restoreState()
         }
     }
     
