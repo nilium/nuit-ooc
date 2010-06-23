@@ -108,11 +108,21 @@ NView: class {
         _name = name clone()
     }
     
+    name: String {
+        get { name() }
+        set(value) { setName(value) }
+    }
+    
     /** Get the view's ID number */
     id: func -> Int { _id }
     
     /** Set the view's ID number */
     setID: func (=_id) {}
+    
+    id: Int {
+        get { id() }
+        set(value) { setID(value) }
+    }
     
     /** Get the size of the view's frame */
     size: final func -> NSize {
@@ -138,6 +148,11 @@ NView: class {
         _frame = frame
     }
     
+    frame: NRect {
+        get { frame() }
+        set(value) { setFrame(value) }
+    }
+    
     /**
         Get the view's bounds
     */
@@ -158,6 +173,20 @@ NView: class {
         setBounds(topLeft, bottomRight)
     }
     
+    bounds: NRect {
+        get { bounds() }
+        set(value) {
+            setBounds(value)
+        }
+    }
+    
+    hidden: Bool {
+        get {
+            return hidden?(true)
+        }
+        set(value) {
+            setHidden(value)
+        }
     }
     
     /**
@@ -280,6 +309,26 @@ NView: class {
     
     /** Sets whether or not a min size is used */
     setMaxSizeEnabled: func (=_has_max_size) {}
+    
+    maxSizeEnabled: Bool {
+        get { maxSizeEnabled() }
+        set(value) { setMaxSizeEnabled(value) }
+    }
+    
+    minSizeEnabled: Bool {
+        get { minSizeEnabled() }
+        set(value) { setMinSizeEnabled(value) }
+    }
+    
+    maxSize: NSize {
+        get { maxSize() }
+        set(value) { setMaxSize(value) }
+    }
+    
+    minSize: NSize {
+        get { minSize() }
+        set(value) { setMinSize(value) }
+    }
     
     /**
         Returns whether or not this view clips its subviews inside its bounds.
