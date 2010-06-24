@@ -96,6 +96,12 @@ NView: class {
         _loadDefaultDrawables()
     }
     
+    /**
+        Loads default drawables for the given view.  Unlike most init(...)
+        methods, this should not typically call superclass implementations
+        unless it subclasses a control that makes use of its superclass's
+        default drawables.
+    */
     _loadDefaultDrawables: func {}
     
 //////// Basic properties
