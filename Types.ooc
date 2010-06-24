@@ -163,6 +163,42 @@ operator != (left, right: NPoint) -> Bool {
     !(left == right)
 }
 
+operator as (value: Float) -> NPoint {
+    NPoint new(value)
+}
+
+operator as (value: Float) -> NSize {
+    NSize new(value)
+}
+
+operator as (size: NSize) -> NPoint {
+    size toPoint()
+}
+
+operator as (point: NPoint) -> NSize {
+    point toSize()
+}
+
+operator as (size: NSize) -> NRect {
+    size toRect()
+}
+
+operator as (point: NPoint) -> NRect {
+    point toRect()
+}
+
+operator as (point: NPoint) -> String {
+    point toString()
+}
+
+operator as (size: NSize) -> String {
+    size toString()
+}
+
+operator as (rect: NRect) -> String {
+    rect toString()
+}
+
 /* 
  * Origins start at (0,0) at the upper-left part of the screen/view/window
  * and as they increase they move closer to the lower-right part of the screen.
