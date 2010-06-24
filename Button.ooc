@@ -13,6 +13,10 @@ NButton: class extends NView {
     
     init: super func
     
+    _loadDefaultDrawables: func {
+        setDrawable(_gui skin() drawableForName("Button"))
+    }
+    
     setCaption: func (._caption) {
         if (_caption != null)
             this _caption = _caption clone()
