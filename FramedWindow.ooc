@@ -33,7 +33,7 @@ NFramedWindow: class extends NWindow {
                 renderer clipRegion(NRect new(origin, NSize new(size() width-4, 22.0)))
                 sz := font sizeOfText(_caption)
                 asc := font ascender()
-                pos := NPoint new(2.0 + (((size() width - 4) - sz width)*0.5) floor(), 2.0 + (8 - (sz height*0.5) floor()) + asc)
+                pos := NPoint new(_bounds_topLeft width + (((size() width - (_bounds_topLeft width + _bounds_bottomRight width)) - sz width)*0.5) floor(), (_bounds_topLeft height - sz height)*0.5 + font ascender() + font descender())
                 renderer drawText(_caption, font, pos)
                 renderer restoreState()
             }

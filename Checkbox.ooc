@@ -35,7 +35,7 @@ NCheckbox: class extends NButton {
 		fnt := font()
 		if (fnt) {
 			sz := _buttonSize()
-			pos := NPoint new(sz width+2, (sz height + fnt ascender())*0.5)
+			pos := NPoint new(sz width+2, (sz height - fnt sizeOfText(caption()) height)*0.5  + fnt ascender() + fnt descender())
 			renderer setFillColor(NColor white())
 			renderer drawText(caption(), fnt, pos)
 		}
