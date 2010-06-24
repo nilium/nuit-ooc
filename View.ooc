@@ -697,7 +697,7 @@ NView: class {
         
         if (subview clipsSubviews()) {
             renderer enableClipping()
-            renderer clipRegion(NRect new(renderer drawingOrigin(), size()))
+            renderer clipRegion(NRect new(renderer drawingOrigin(), subview size()))
         }
     }
 
