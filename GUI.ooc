@@ -1,11 +1,5 @@
 import structs/LinkedList
-import Types
-import View
-import Renderer
-import Window
-import Popup
-import Font
-import Drawable
+import Types, View, Renderer, Window, Popup, Font, Drawable, Skin
 
 NWindowPosition: enum {
     raised = 0
@@ -42,6 +36,9 @@ NGUI: class {
     
     /** The default font used by views */
     _viewFont: NFont = null
+    
+    /** The active skin, defaults to a NNullSkin */
+    _skin: NSkin = NNullSkin new()
     
     __updateMousePosition: func (pos: NPoint) {
         if (pos != _mouse_cur)
