@@ -1,18 +1,52 @@
 import GUI
+import Image
 import Drawable
+import NinePatchDrawable
 import Types
+import View
 import Window
 import Renderer
 
+/**
+    A common NWindow subclass, has a visible frame, can be resized and moved.
+    
+    :section: Skin Attributes
+    
+    :attrib:`FramedWindow`
+    :type: NDrawable
+    Two-frame drawable for the window background.  Frame 0 is the active window
+    frame, frame 1 is the inactive window frame.  Disabled windows use the
+    inactive window frame as well.
+    
+    :attrib:`Shadow`
+    :type: NDrawable
+    Drawable for all shadows in NUIT (or at least all that use this drawable).
+    
+    :attrib:`FramedWindowResizer`
+    :type: NSize
+    :default: {16.0, 16.0}
+    Width of the resizer block on the window.
+*/
 NFramedWindow: class extends NWindow {
+    _shadow: NDrawable
     _dragging := 0
     _drag_point: NPoint
     _caption := ""
+    _resizerSize: NSize
     
     init: func (gui: NGUI, frame: NRect) {
         super(gui, frame)
-        setMinimumSize(NSize new(40.0, 40.0))
-        setMinimumSizeEnabled(true)
+        
+        minSize = NSize new(40.0, 40.0)
+        minSizeEnabled = true
+        setBounds(NSize new(2.0, 22.0), NSize new(2.0, 2.0))
+    }
+    
+    _loadDefaultDrawables: func {
+        skin := _gui skin()
+        setDrawable(skin drawableForName("FramedWindow"))
+        _shadow = skin drawableForName("Shadow")
+        _resizerSize = skin sizeForName("FramedWindowResizer", NSize new(16.0, 16.0))
     }
     
     draw: func (renderer: NRenderer) {
@@ -21,6 +55,15 @@ NFramedWindow: class extends NWindow {
             // Only draw the title and shadow if we have a frame to begin with
             
             frame: Int = (isMainWindow?() ? 0 : 1)
+            if (_shadow) {
+                renderer saveState()
+                renderer setFillColor(NColor black(0.5))
+                shadowRect := NRect new(NPoint new(-4.0, 0.0), size())
+                shadowRect size height += 6.0
+                shadowRect size width += 8.0
+                _shadow drawInRect(renderer, shadowRect, 0)
+                renderer restoreState()
+            }
             drw drawInRect(renderer, NRect new(NPoint zero(), size()), frame)
             
             font := font()
@@ -82,17 +125,6 @@ NFramedWindow: class extends NWindow {
         if (button == 1) {
             _dragging = 0
         }
-    }
-    
-    bounds: func -> NRect {
-        bounds: NRect
-        bounds origin set(1.0, 24.0)
-        bounds size = size()
-        bounds size subtract(bounds origin toSize())
-        bounds size width -= 1
-        bounds size height -= 1
-        return bounds
-        
     }
     
     setCaption: func (._caption) {
