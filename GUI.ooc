@@ -276,4 +276,13 @@ NGUI: class {
         }
     }
     
+    skin: func -> NSkin { _skin }
+    setSkin: func (=_skin) {
+        if (_skin == null) {
+            _skin = NNullSkin new()
+        }
+        
+        setViewFont(_skin fontForName("DefaultFont"))
+    }
+    
 }
