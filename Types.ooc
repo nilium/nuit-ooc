@@ -155,6 +155,110 @@ NPoint: cover {
 	}
 }
 
+operator + (left, right: NPoint) -> NPoint {
+    left add(right)
+    return left
+}
+
+operator - (left, right: NPoint) -> NPoint {
+    left subtract(right)
+    return left
+}
+
+operator + (left, right: NSize) -> NSize {
+    left add(right)
+    return left
+}
+
+operator - (left, right: NSize) -> NSize {
+    left subtract(right)
+    return left
+}
+
+operator + (left: NPoint, right: NSize) -> NPoint {
+    left add(right toPoint())
+    return left
+}
+
+operator - (left: NPoint, right: NSize) -> NPoint {
+    left subtract(right toPoint())
+    return left
+}
+
+operator + (left: NSize, right: NPoint) -> NSize {
+    left add(right toSize())
+    return left
+}
+
+operator - (left: NSize, right: NPoint) -> NSize {
+    left subtract(right toSize())
+    return left
+}
+
+operator += (_left: NPoint@, right: NPoint) {
+    left: NPoint = _left
+    left add(right)
+    _left = left
+}
+
+operator -= (_left: NPoint@, right: NPoint) {
+    left: NPoint = _left
+    left subtract(right)
+    _left = left
+}
+
+operator += (_left: NSize@, right: NSize) {
+    left: NSize = _left
+    left add(right)
+    _left = left
+}
+
+operator -= (_left: NSize@, right: NSize) {
+    left: NSize = _left
+    left subtract(right)
+    _left = left
+}
+
+operator += (_left: NPoint@, right: NSize) {
+    left: NPoint = _left
+    left add(right toPoint())
+    _left = left
+}
+
+operator -= (_left: NPoint@, right: NSize) {
+    left: NPoint = _left
+    left subtract(right toPoint())
+    _left = left
+}
+
+operator += (_left: NSize@, right: NPoint) {
+    left: NSize = _left
+    left add(right toSize())
+    _left = left
+}
+
+operator -= (_left: NSize@, right: NPoint) {
+    left: NSize = _left
+    left subtract(right toSize())
+    _left = left
+}
+
+operator = (left: NSize@, right: NPoint) {
+    left = right toSize()
+}
+
+operator = (left: NRect@, right: NPoint) {
+    left = right toRect()
+}
+
+operator = (left: NPoint@, right: NSize) {
+    left = right toPoint()
+}
+
+operator = (left: NRect@, right: NSize) {
+    left = right toRect()
+}
+
 operator == (left, right: NPoint) -> Bool {
 	left x equals(right x) && left y equals(right y)
 }
