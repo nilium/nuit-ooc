@@ -9,6 +9,10 @@ NCheckbox: class extends NButton {
 		setChecked(!checked())
 	}
 	
+	_loadDefaultDrawables: func {
+        setDrawable(_gui skin() drawableForName("Checkbox"))
+    }
+	
 	setChecked: func (=_checked) {}
 	checked: func -> Bool { _checked }
 	
@@ -18,12 +22,11 @@ NCheckbox: class extends NButton {
 	}
 	
 	draw: func (renderer: NRenderer) {
-		renderer saveState()
 		frm := _buttonSize() toRect()
 		drawButton(renderer, frm)
 		drw := drawable()
-		renderer restoreState()
 		if (_checked && drw) {
+		    frm origin y += _pressFade value()
 			drw drawInRect(renderer, frm, 4)
 		}
 		renderer saveState()
