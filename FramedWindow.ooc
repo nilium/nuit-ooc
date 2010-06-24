@@ -37,16 +37,16 @@ NFramedWindow: class extends NWindow {
     init: func (gui: NGUI, frame: NRect) {
         super(gui, frame)
         
-        minSize = NSize new(40.0, 40.0)
+        minSize = NSize new(64.0, 64.0)
         minSizeEnabled = true
-        setBounds(NSize new(2.0, 22.0), NSize new(2.0, 2.0))
+        setBounds(NSize new(2.0, 22.0), NSize new(2.0))
     }
     
     _loadDefaultDrawables: func {
         skin := _gui skin()
         setDrawable(skin drawableForName("FramedWindow"))
         _shadow = skin drawableForName("Shadow")
-        _resizerSize = skin sizeForName("FramedWindowResizer", NSize new(16.0, 16.0))
+        _resizerSize = skin sizeForName("FramedWindowResizer", NSize new(16.0))
     }
     
     draw: func (renderer: NRenderer) {
@@ -83,17 +83,16 @@ NFramedWindow: class extends NWindow {
         }
     }
     
-    mousePressed: func (button: Int, position: NPoint) {
+    mousePressed: func (button: Int, position: NPoint) -> NView {
         if (button == 1) {
             region: NRect
             
-            region size = size()
-            region set(region width() - 20.0, region height() - 20.0, 20.0, 20.0)
+            region origin = (size() - _resizerSize) as NPoint
+            region size = _resizerSize
             if (region contains(position)) {
                 _dragging = 2
-                _drag_point = size() toPoint()
-                _drag_point subtract(position)
-                return
+                _drag_point = size() as NPoint - position
+                return this
             }
             
             region = frame()
@@ -101,7 +100,7 @@ NFramedWindow: class extends NWindow {
             region size height = 24.0
             if (region contains(position)) {
                 _dragging = 1
-                return
+                return this
             }
         }
         
@@ -112,10 +111,9 @@ NFramedWindow: class extends NWindow {
         if (_dragging != 0) {
             frame := frame()
             if (_dragging == 1) {
-                frame origin add(delta)
+                frame origin += delta
             } else {
-                to add(_drag_point)
-                frame size = to toSize()
+                frame size = (to + _drag_point) as NSize
             }
             setFrame(frame)
         }
