@@ -572,7 +572,13 @@ NView: class {
             
             subview = subview viewForPoint(trpoint)
             if (subview) {
-                if (subview instanceOf(NWindow) || subview instanceOf(NPopup)) {
+                if (subview instanceOf(NPopup)) {
+                    if (_gui popup() == subview)
+                        return subview
+                    continue
+                }
+                
+                if (subview instanceOf(NWindow)) {
                     return subview
                 }
                 

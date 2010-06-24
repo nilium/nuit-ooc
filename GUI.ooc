@@ -54,7 +54,6 @@ NGUI: class {
             if (!_popup hidden?(false)) {
                 view = _popup viewForPoint(_popup convertPointFromScreen(position))
                 if (view == null) {
-                    _popup hide()
                     _popup = null
                 }
             } else {
@@ -241,13 +240,7 @@ NGUI: class {
     
     setPopup: func (popup: NPopup) {
         if (_popup != popup) {
-            if (_popup) {
-                _popup hide()
-            }
             _popup = popup
-            if (popup) {
-                popup show()
-            }
             pushMouseMoveEvent(_mouse_cur)
         }
     }
