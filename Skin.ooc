@@ -26,22 +26,51 @@ NSkinFactoryManager: class {
 }
 NSkinFactory := NSkinFactoryManager new()
 
+
+/* this is going to be the most fun thing to implement ever */
 NSkin: abstract class {
-    fontForName: abstract func (name: String, deflt: NFont) -> NFont
-    imageForName: abstract func (name: String, deflt: NImage) -> NImage
-    drawableForName: abstract func (name: String, deflt: NDrawable) -> NDrawable
-    numberForName: abstract func (name: String, deflt: NFloat) -> NFloat
-    stringForName: abstract func (name: String, deflt: String) -> String
-    colorForName: abstract func (name: String, deflt: NColor) -> NColor
-    fontForName: final func ~deflt (name: String) -> NFont { fontForName(name, null) }
-    imageForName: final func ~deflt (name: String) -> NImage { imageForName(name, null) }
-    drawableForName: final func ~deflt (name: String) -> NDrawable { drawableForName(name, null) }
-    numberForName: final func ~deflt (name: String) -> NFloat { numberForName(name, 0.0) }
-    stringForName: final func ~deflt (name: String) -> String { stringForName(name, null) }
-    colorForName: final func ~deflt (name: String) -> NColor { colorForName(name, NColor new()) }
+    fontForName: abstract func (name: String) -> NFont
+    imageForName: abstract func (name: String) -> NImage
+    drawableForName: abstract func (name: String) -> NDrawable
+    numberForName: abstract func (name: String) -> NFloat
+    stringForName: abstract func (name: String) -> String
+    colorForName: abstract func (name: String) -> NColor
+    pointForName: abstract func (name: String) -> NPoint
+    sizeForName: abstract func (name: String) -> NSize
+    rectForName: abstract func (name: String) -> NRect
+    boolForName: abstract func (name: String) -> Bool
+    
+    numberForName: final func ~default (name: String, deflt: NFloat) -> NFloat {
+        hasNumberForName?(name) ? numberForName(name) : deflt
+    }
+    stringForName: final func ~default (name: String, deflt: String) -> String {
+        val := stringForName(name)
+        if (val != null)
+            return val
+        return deflt
+    }
+    colorForName: final func ~default (name: String, deflt: NColor) -> NColor {
+        hasColorForName?(name) ? colorForName(name) : deflt
+    }
+    pointForName: final func ~default (name: String, deflt: NPoint) -> NPoint {
+        hasPointForName?(name) ? pointForName(name) : deflt
+    }
+    sizeForName: final func ~default (name: String, deflt: NSize) -> NSize {
+        hasSizeForName?(name) ? sizeForName(name) : deflt
+    }
+    rectForName: final func ~default (name: String, deflt: NRect) -> NRect {
+        hasRectForName?(name) ? rectForName(name) : deflt
+    }
+    boolForName: final func ~default (name: String, deflt: Bool) -> Bool {
+        hasBoolForName?(name) ? boolForName(name) : deflt
+    }
     
     hasNumberForName?: abstract func (name: String) -> Bool
     hasColorForName?: abstract func (name: String) -> Bool
+    hasPointForName?: abstract func (name: String) -> Bool
+    hasSizeForName?: abstract func (name: String) -> Bool
+    hasRectForName?: abstract func (name: String) -> Bool
+    hasBoolForName?: abstract func (name: String) -> Bool
 }
 
 NMultiSkin: class extends NSkin {
@@ -51,149 +80,236 @@ NMultiSkin: class extends NSkin {
         __skins add(skin)
     }
     
-    fontForName: func (name: String, deflt: NFont) -> NFont {
+    fontForName: func (name: String) -> NFont {
         for (skin: NSkin in __skins) {
             if (skin == null)
                 continue
             res := skin fontForName(name)
             if (res) return res
         }
-        return deflt
+        return null
     }
     
-    imageForName: func (name: String, deflt: NImage) -> NImage {
+    imageForName: func (name: String) -> NImage {
         for (skin: NSkin in __skins) {
             if (skin == null)
                 continue
             res := skin imageForName(name)
             if (res) return res
         }
-        return deflt
+        return null
     }
     
-    drawableForName: func (name: String, deflt: NDrawable) -> NDrawable {
+    drawableForName: func (name: String) -> NDrawable {
         for (skin: NSkin in __skins) {
             if (skin == null)
                 continue
             res := skin drawableForName(name)
             if (res) return res
         }
-        return deflt
+        return null
     }
     
-    numberForName: func (name: String, deflt: NFloat) -> NFloat {
+    numberForName: func (name: String) -> NFloat {
         for (skin: NSkin in __skins) {
             if (skin == null || !skin hasNumberForName?(name))
                 continue
             return skin numberForName(name)
         }
-        return deflt
+        return 0.0
     }
     
-    stringForName: func (name: String, deflt: String) -> String {
+    stringForName: func (name: String) -> String {
         for (skin: NSkin in __skins) {
             if (skin == null)
                 continue
             res := skin stringForName(name)
             if (res) return res
         }
-        return deflt
+        return null
     }
     
-    colorForName: func (name: String, deflt: NColor) -> NColor {
+    colorForName: func (name: String) -> NColor {
         for (skin: NSkin in __skins) {
             if (skin == null || !skin hasColorForName?(name))
                 continue
             return skin colorForName(name)
         }
-        return deflt
+        return NColor black(0.0)
+    }
+    
+    pointForName: func (name: String) -> NPoint {
+        for (skin: NSkin in __skins) {
+            if (skin == null || !skin hasPointForName?(name))
+                continue
+            return skin pointForName(name)
+        }
+        return NPoint zero()
+    }
+    
+    sizeForName: func (name: String) -> NSize {
+        for (skin: NSkin in __skins) {
+            if (skin == null || !skin hasSizeForName?(name))
+                continue
+            return skin sizeForName(name)
+        }
+        return NSize zero()
+    }
+    
+    rectForName: func (name: String) -> NRect {
+        for (skin: NSkin in __skins) {
+            if (skin == null || !skin hasRectForName?(name))
+                continue
+            return skin rectForName(name)
+        }
+        return NRect zero()
     }
 }
 
 NBasicSkin: class extends NSkin {
-    _fonts := HashMap<String, NFont> new(4)
-    _images := HashMap<String, NImage> new(16)
-    _drawables := HashMap<String, NDrawable> new(16)
-    _strings := HashMap<String, String> new(16)
-    _numbers := HashMap<String, NFloat> new(16)
-    _colors := HashMap<String, NColor> new(16)
+    _table := HashMap<String, Cell<Pointer>> new(64)
     
-    addFont: func (name: String, font: NFont) {
-        _fonts put(name, font)
+    _key: func (T: Class, name: String) -> String {
+        "%s_%s" format(T name, name)
     }
     
-    fontForName: func (name: String, deflt: NFont) -> NFont {
-        if (_fonts contains(name))
-            return _fonts get(name)
-        return deflt
+    _contains: func <T> (name: String, T: Class) -> Bool {
+        cell := _table get(_key(T, name))
+        return cell != null
+    }
+    
+    _insert: func <T> (name: String, value: T) {
+        _table put(_key(T, name), Cell<T> new(value))
+    }
+    
+    _get: func <T> (name: String, T: Class) -> T {
+        cell := _table get(_key(T, name)) as Cell<T>
+        if (cell != null)
+            return cell val
+        return null
+    }
+    
+    addFont: func (name: String, font: NFont) {
+        _insert(name, font)
+    }
+    
+    fontForName: func (name: String) -> NFont {
+        _get(name, NFont)
     }
     
     addImage: func (name: String, image: NImage) {
-        _images put(name, image)
+        _insert(name, image)
     }
     
-    imageForName: func (name: String, deflt: NImage) -> NImage {
-        if (_images contains(name))
-            return _images get(name)
-        return deflt
+    imageForName: func (name: String) -> NImage {
+        _get(name, NImage)
     }
     
     addDrawable: func (name: String, drawable: NDrawable) {
-        _drawables put(name, drawable)
+        _insert(name, drawable)
     }
     
-    drawableForName: func (name: String, deflt: NDrawable) -> NDrawable {
-        if (_drawables contains(name))
-            return _drawables get(name)
-        return deflt
+    drawableForName: func (name: String) -> NDrawable {
+        _get(name, NDrawable)
     }
     
     addNumber: func (name: String, num: NFloat) {
-        _numbers put(name, num)
+        _insert(name, num)
     }
     
     hasNumberForName?: func (name: String) -> Bool {
-        _numbers contains(name)
+        _contains(name, NFloat)
     }
     
-    numberForName: func (name: String, deflt: NFloat) -> NFloat {
-        if (hasNumberForName?(name))
-            return _numbers get(name)
-        return deflt
+    numberForName: func (name: String) -> NFloat {
+        _get(name, NFloat)
     }
     
     addString: func (name: String, str: String) {
-        _strings put(name, str)
+        _insert(name, str)
     }
     
-    stringForName: func (name: String, deflt: String) -> String {
-        if (_strings contains(name))
-            return _strings get(name)
-        return deflt
+    stringForName: func (name: String) -> String {
+        _get(name, String)
     }
     
     addColor: func (name: String, clr: NColor) {
-        _colors put(name, clr)
+        _insert(name, clr)
     }
     
     hasColorForName?: func (name: String) -> Bool {
-        _colors contains(name)
+        _contains(name, NColor)
     }
     
-    colorForName: func (name: String, deflt: NColor) -> NColor {
-        if (hasColorForName?(name))
-            return _colors get(name)
-        return deflt
+    colorForName: func (name: String) -> NColor {
+        _get(name, NColor)
+    }
+    
+    hasPointForName?: func (name: String) -> Bool {
+        _contains(name, NPoint)
+    }
+    
+    pointForName: func (name: String) -> NPoint {
+        _get(name, NPoint)
+    }
+    
+    addPoint: func (name: String, point: NPoint) {
+        _insert(name, point)
+    }
+    
+    hasSizeForName?: func (name: String) -> Bool {
+        _contains(name, NSize)
+    }
+    
+    sizeForName: func (name: String) -> NSize {
+        _get(name, NSize)
+    }
+    
+    addSize: func (name: String, size: NSize) {
+        _insert(name, size)
+    }
+    
+    hasRectForName?: func (name: String) -> Bool {
+        _contains(name, NRect)
+    }
+    
+    rectForName: func (name: String) -> NRect {
+        _get(name, NRect)
+    }
+    
+    addRect: func (name: String, rect: NRect) {
+        _insert(name, rect)
+    }
+    
+    hasBoolForName?: func (name: String) -> Bool {
+        _contains(name, Bool)
+    }
+    
+    boolForName: func (name: String) -> Bool {
+        _get(name, Bool)
+    }
+    
+    addBool: func (name: String, val: Bool) {
+        _insert(name, val)
     }
 }
 
 NNullSkin: class extends NSkin {
-	fontForName: func (name: String, deflt: NFont) -> NFont { deflt }
-    imageForName: func (name: String, deflt: NImage) -> NImage { deflt }
-    drawableForName: func (name: String, deflt: NDrawable) -> NDrawable { deflt }
-    numberForName: func (name: String, deflt: NFloat) -> NFloat { deflt }
-    stringForName: func (name: String, deflt: String) -> String { deflt }
-    colorForName: func (name: String, deflt: NColor) -> NColor { deflt }
+	fontForName: func (name: String) -> NFont { null }
+    imageForName: func (name: String) -> NImage { null }
+    drawableForName: func (name: String) -> NDrawable { null }
+    numberForName: func (name: String) -> NFloat { 0.0 }
+    stringForName: func (name: String) -> String { null }
+    colorForName: func (name: String) -> NColor { NColor black(0.0) }
+    pointForName: func (name: String) -> NPoint { NPoint zero() }
+    sizeForName: func (name: String) -> NSize { NSize zero() }
+    rectForName: func (name: String) -> NRect { NRect zero() }
+    boolForName: func (name: String) -> Bool { false }
+    
     hasNumberForName?: func (name: String) -> Bool { false }
     hasColorForName?: func (name: String) -> Bool { false }
+    hasPointForName?: func (name: String) -> Bool { false }
+    hasSizeForName?: func (name: String) -> Bool { false }
+    hasRectForName?: func (name: String) -> Bool { false }
+    hasBoolForName?: func (name: String) -> Bool { false }
 }
