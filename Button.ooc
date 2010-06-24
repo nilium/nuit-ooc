@@ -28,13 +28,15 @@ NButton: class extends NView {
         _caption
     }
     
-    mousePressed: func (button: Int, position: NPoint) {
+    mousePressed: func (button: Int, position: NPoint) -> NView {
         if (button == 1) {
             _pressed = true
             _pressFade setInitial(_pressFade value()).
                         setTarget(1.0).
                         restart()
+            return this
         }
+        return forwardMousePressedEvent(button, position)
     }
     
     mouseMoved: func (pos: NPoint, delta: NPoint) {
