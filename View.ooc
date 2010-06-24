@@ -678,7 +678,7 @@ NView: class {
     */
     drawSubview: func (renderer: NRenderer, subview: NView) {
         // this is bad practice, but it works
-        if (subview hidden?(false) || subview instanceOf(NWindow) || subview instanceOf(NPopup))
+        if (subview hidden?(false) || subview instanceOf(NWindow) || (subview instanceOf(NPopup) && !subview isSubviewOf(_gui popup())))
             return
         
         renderer saveState()
@@ -728,9 +728,10 @@ NView: class {
     }
     
     /** Forwards a mouse pressed event to the view's superview */
-    forwardMousePressedEvent: final func (button: Int, mousePosition: NPoint) {
+    forwardMousePressedEvent: final func (button: Int, mousePosition: NPoint) -> NView {
         if (_superview)
-            _superview mousePressed(button, __pointToSuperview(mousePosition))
+            return _superview mousePressed(button, __pointToSuperview(mousePosition))
+        return null
     }
     
     /** Forwards a mouse released event to the view's superview */
@@ -773,8 +774,13 @@ NView: class {
        your implementation is not able to handle the event, you should call
        the superclass's implementation or :meth:`forwardMousePressedEvent`
        with the event data.
+       
+       :return: Returns the view that gains focus (the one that handled the
+       event).  This is typically 'this', although it is possible to forward
+       the event to another view and return it (see
+       :meth:`forwardMousePressedEvent`).  Defaults to null.
     */
-    mousePressed: func (button: Int, mousePosition: NPoint) {
+    mousePressed: func (button: Int, mousePosition: NPoint) -> NView {
         forwardMousePressedEvent(button, mousePosition)
     }
     
@@ -789,14 +795,9 @@ NView: class {
        :param: position The current position of the mouse *in the view's
        coordinate space.*
 
-       The default implementation passes the event on to its superview.  If
-       your implementation is not able to handle the event, you should call
-       the superclass's implementation or :meth:`forwardMouseReleasedEvent`
-       with the event data.
+       The default implementation does not pass the event on to its superview.
     */
-    mouseReleased: func (button: Int, mousePosition: NPoint) {
-        forwardMouseReleasedEvent(button, mousePosition)
-    }
+    mouseReleased: func (button: Int, mousePosition: NPoint) {}
     
     /**
         Called when the mouse has entered the view.  This does not imply that

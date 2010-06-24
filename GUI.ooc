@@ -73,26 +73,27 @@ NGUI: class {
             }
         }
         
-        _mouseView = view
-        
         if (_overView != view) {
             if (_overView) _overView mouseLeft()
             _overView = view
             if (_overView) _overView mouseEntered()
         }
         
-        if (_focalView != view) {
-            if (_focalView) _focalView focusLost()
-            _focalView = view
-            if (_focalView) _focalView focusGained()
-        }
-        
         if (view && !view disabled?(false)) {
-            root := view root()
-            if (root instanceOf(NWindow))
-                setMainWindow(root as NWindow)
+            view = view mousePressed(button, view convertPointFromScreen(position))
+            _mouseView = view
             
-            view mousePressed(button, view convertPointFromScreen(position))
+            if (view) {
+                root := view root()
+                if (root instanceOf(NWindow))
+                    setMainWindow(root as NWindow)
+            }
+            
+            if (_focalView != view) {
+                if (_focalView) _focalView focusLost()
+                _focalView = view
+                if (_focalView) _focalView focusGained()
+            }
         }
     }
     
@@ -100,10 +101,11 @@ NGUI: class {
         _mouse_prev = _mouse_cur
         _mouse_cur = position
         
-        position subtract(_mouse_prev)
+        delta := position.
+				subtract(_mouse_prev)
         
         if (_mouseView && !(_mouseView hidden?(true) || _mouseView disabled?(true))) {
-            _mouseView mouseMoved(_mouseView convertPointFromScreen(_mouse_cur), position)
+            _mouseView mouseMoved(_mouseView convertPointFromScreen(position), delta)
         } else {
             set := false
             view: NView = null
@@ -111,13 +113,13 @@ NGUI: class {
             
             if (_popup) {
                 if (!_popup hidden?(false))
-                    view = _popup viewForPoint(_popup convertPointFromScreen(_mouse_cur))
+                    view = _popup viewForPoint(_popup convertPointFromScreen(position))
                 else
                     _popup = null
             }
             
             if (view == null && _mainWindow && !(_mainWindow hidden?(true) || _mainWindow disabled?(false)))
-                view = _mainWindow viewForPoint(_mainWindow convertPointFromScreen(_mouse_cur))
+                view = _mainWindow viewForPoint(_mainWindow convertPointFromScreen(position))
             
             if (_overView != view) {
                 if (_overView) _overView mouseLeft()
@@ -126,7 +128,7 @@ NGUI: class {
             }
             
             if (view && !view disabled?(true))
-                view mouseMoved(view convertPointFromScreen(_mouse_cur), position)
+                view mouseMoved(view convertPointFromScreen(position), delta)
         }
     }
     
@@ -143,6 +145,8 @@ NGUI: class {
                 _overView = null
             }
             _mouseView = null
+            
+            pushMouseMoveEvent(position)
         }
     }
     
@@ -241,6 +245,13 @@ NGUI: class {
     setPopup: func (popup: NPopup) {
         if (_popup != popup) {
             _popup = popup
+            root := popup
+            while (root) {
+                if (root instanceOf(NPopup)) {
+                    _popup = root
+                }
+                root = root superview()
+            }
             pushMouseMoveEvent(_mouse_cur)
         }
     }
