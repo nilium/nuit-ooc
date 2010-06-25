@@ -90,4 +90,6 @@ NAnimatedValue: class {
         if (duration == 0) duration = 1
         __durationOverOne = 1.0 / (duration as Double)
     }
+    
+    running?: func -> Bool { __running }
 }
