@@ -560,6 +560,9 @@ NView: class {
         The point is assumed to be in the view's coordinate system already.
     */
     viewForPoint: func (point: NPoint) -> NView {
+        if (!receivesEvents?())
+            return null
+        
         sansBounds := point
         sansBounds subtract(bounds() origin)
         
@@ -894,5 +897,7 @@ NView: class {
     drawable: func -> NDrawable { _drawable }
     
     setDrawable: func (=_drawable) {}
+    
+    receivesEvents?: func -> Bool { true }
     
 }
