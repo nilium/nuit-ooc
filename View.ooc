@@ -448,6 +448,8 @@ NView: class {
     
     /** Adds a view as a subview to this view's hierarchy */
     addSubview: func (view: NView) {
+        if (view == this)
+            Exception new(This, "Cannot create a cycle with views/subviews")
         if (view superview() != null)
             Exception new(This, "Cannot add a subview that already has a superview") throw()
         
