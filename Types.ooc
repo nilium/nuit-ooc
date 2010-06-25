@@ -61,6 +61,16 @@ NSize: cover {
 		this height -= other height
 	}
 	
+	multiply: func@ (other: This) {
+	    this width *= other width
+	    this height *= other height
+	}
+	
+	divide: func@ (other: This) {
+	    this width /= other width
+	    this height /= other height
+	}
+	
 	set: func@ (=width, =height) {}
 	get: func (width, height: NFloat@) {
 		width = this width
@@ -132,6 +142,16 @@ NPoint: cover {
 		this y -= other y
 	}
 	
+	multiply: func@ (other: This) {
+	    this x *= other x
+	    this y *= other y
+	}
+	
+	divide: func@ (other: This) {
+	    this x /= other x
+	    this y /= other y
+	}
+	
 	set: func@ (=x, =y) {}
 	get: func (x, y: NFloat@) {
 		x = this x
@@ -165,6 +185,16 @@ operator - (left, right: NPoint) -> NPoint {
     return left
 }
 
+operator * (left, right: NPoint) -> NPoint {
+    left multiply(right)
+    return left
+}
+
+operator / (left, right: NPoint) -> NPoint {
+    left divide(right)
+    return left
+}
+
 operator + (left, right: NSize) -> NSize {
     left add(right)
     return left
@@ -172,6 +202,16 @@ operator + (left, right: NSize) -> NSize {
 
 operator - (left, right: NSize) -> NSize {
     left subtract(right)
+    return left
+}
+
+operator * (left, right: NSize) -> NSize {
+    left multiply(right)
+    return left
+}
+
+operator / (left, right: NSize) -> NSize {
+    left divide(right)
     return left
 }
 
@@ -195,6 +235,26 @@ operator - (left: NSize, right: NPoint) -> NSize {
     return left
 }
 
+operator * (left: NPoint, right: NSize) -> NPoint {
+    left multiply(right toPoint())
+    return left
+}
+
+operator / (left: NPoint, right: NSize) -> NPoint {
+    left divide(right toPoint())
+    return left
+}
+
+operator * (left: NSize, right: NPoint) -> NSize {
+    left multiply(right toSize())
+    return left
+}
+
+operator / (left: NSize, right: NPoint) -> NSize {
+    left divide(right toSize())
+    return left
+}
+
 operator += (_left: NPoint@, right: NPoint) {
     left: NPoint = _left
     left add(right)
@@ -207,6 +267,18 @@ operator -= (_left: NPoint@, right: NPoint) {
     _left = left
 }
 
+operator *= (_left: NPoint@, right: NPoint) {
+    left: NPoint = _left
+    left multiply(right)
+    _left = left
+}
+
+operator /= (_left: NPoint@, right: NPoint) {
+    left: NPoint = _left
+    left divide(right)
+    _left = left
+}
+
 operator += (_left: NSize@, right: NSize) {
     left: NSize = _left
     left add(right)
@@ -216,6 +288,18 @@ operator += (_left: NSize@, right: NSize) {
 operator -= (_left: NSize@, right: NSize) {
     left: NSize = _left
     left subtract(right)
+    _left = left
+}
+
+operator *= (_left: NSize@, right: NSize) {
+    left: NSize = _left
+    left multiply(right)
+    _left = left
+}
+
+operator /= (_left: NSize@, right: NSize) {
+    left: NSize = _left
+    left divide(right)
     _left = left
 }
 
@@ -240,6 +324,30 @@ operator += (_left: NSize@, right: NPoint) {
 operator -= (_left: NSize@, right: NPoint) {
     left: NSize = _left
     left subtract(right toSize())
+    _left = left
+}
+
+operator *= (_left: NPoint@, right: NSize) {
+    left: NPoint = _left
+    left multiply(right toPoint())
+    _left = left
+}
+
+operator /= (_left: NPoint@, right: NSize) {
+    left: NPoint = _left
+    left divide(right toPoint())
+    _left = left
+}
+
+operator *= (_left: NSize@, right: NPoint) {
+    left: NSize = _left
+    left multiply(right toSize())
+    _left = left
+}
+
+operator /= (_left: NSize@, right: NPoint) {
+    left: NSize = _left
+    left divide(right toSize())
     _left = left
 }
 
