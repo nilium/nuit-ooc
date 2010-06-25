@@ -90,10 +90,10 @@ NButton: class extends NView {
             pressedAlpha := _pressFade value() as NFloat
             overAlpha := (_hiliteFade value() * (1.0 - pressedAlpha)) as NFloat
             
-            renderer setFillColor(NColor white(overAlpha))
+            renderer applyFillColor(NColor white(overAlpha))
             drw drawInRect(renderer, size() toRect(), 1)
             
-            renderer setFillColor(NColor white(pressedAlpha))
+            renderer applyFillColor(NColor white(pressedAlpha))
             drw drawInRect(renderer, size() toRect(), 2)
             renderer restoreState()
         }
@@ -114,7 +114,7 @@ NButton: class extends NView {
             pos x = pos x floor()
             pos y = pos y floor()
             
-            renderer setFillColor(NColor white(1.0))
+            renderer applyFillColor(NColor white(1.0))
             renderer drawText(_caption, font, pos)
         }
     }

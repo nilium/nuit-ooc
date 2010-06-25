@@ -57,7 +57,7 @@ NFramedWindow: class extends NWindow {
             frame: Int = (isMainWindow?() ? 0 : 1)
             if (_shadow) {
                 renderer saveState()
-                renderer setFillColor(NColor black(0.5))
+                renderer applyFillColor(NColor black(0.5))
                 shadowRect := NRect new(NPoint new(-4.0, 0.0), size())
                 shadowRect size height += 6.0
                 shadowRect size width += 8.0
