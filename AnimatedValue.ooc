@@ -11,6 +11,8 @@ NAnimatedValue: class {
     __duration: ULLong = 1
     /** 1.0 divided by :field:`__duration`. */
     __durationOverOne: Double
+    /** A closure that is called when the animation ends. */
+    __closure: Func(NAnimatedValue)
     /** The initial value of the animation. */
     _initial: Double
     /** The target value of the animation. */
@@ -42,6 +44,7 @@ NAnimatedValue: class {
         delta := __durationOverOne * (__running ? (Time runTime - __start) : __elapsed)
         if (1.0 < delta) {
             stop()
+            if (__closure) __closure(this)
             return 1.0
         }
         if (delta < 0.0) return 0.0
@@ -55,6 +58,8 @@ NAnimatedValue: class {
         you would like to implement something other than linear interpolation.
         In such a case, you can call :meth:`progress` to get the current
         progress of the animation.
+        
+        If the animation has exceeded its elapsed time, it will be stopped.
     */
     value: func -> Double {
         return _initial + (_target-_initial)*progress()
@@ -82,6 +87,24 @@ NAnimatedValue: class {
         __running = false
     }
     
+    /**
+        Updates the animation.  If the animation has exceeded its elapsed time,
+        it will be stopped.  This function is faster for updates than calling
+        :meth:`value` since it does not calculate the current value of the
+        animation.
+    */
+    update: final func {
+        if (__running)
+            progress()
+    }
+    
+    /**
+        Sets a function to be called when the animation reaches or exceeds its
+        duration.
+    */
+    setEndFunc: final func (=__closure) {}
+    
+    /** Returns the duration of the animation */
     duration: final func -> ULLong { __duration }
     
     /** Sets the duration of the animation. */
@@ -91,5 +114,6 @@ NAnimatedValue: class {
         __durationOverOne = 1.0 / (duration as Double)
     }
     
+    /** Returns whether or not the animation is running */
     running?: func -> Bool { __running }
 }
