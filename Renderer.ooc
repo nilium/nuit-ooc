@@ -92,10 +92,12 @@ NRenderer: abstract class {
 	
 	/**
 	    Translates the drawing origin by the provided relative point.
+	    
+	    Translations applied to the drawing origin are scaled by the current
+	    drawing scale.
 	*/
 	translateDrawingOrigin: func (trans: NPoint) {
-	    trans add(drawingOrigin())
-	    setDrawingOrigin(trans)
+	    setDrawingOrigin(drawingOrigin() + trans * scale())
 	}
 	
 	/**
@@ -110,6 +112,19 @@ NRenderer: abstract class {
 	    rectangles.
 	*/
 	setFillColor: abstract func (fillColor: NColor)
+	
+	/**
+	    Multiples the current fill color with the new color and sets the result
+	    as the new fill color.
+	*/
+	applyFillColor: func (color: NColor) {
+	    cur := fillColor()
+	    cur alpha *= color alpha
+	    cur red *= color red
+	    cur green *= color green
+	    cur blue *= color blue
+	    setFillColor(cur)
+	}
 	
 	/**
 	    Fills the :param:`rect` with the current fill color.
@@ -156,4 +171,29 @@ NRenderer: abstract class {
 	    :param:`font`.  The point specifies the baseline.
 	*/
 	drawText: abstract func (text: String, font: NFont, point: NPoint)
+	
+	/**
+	    Sets the drawing scale to the specified scale.  Scaling is applied
+	    prior to translating rendered elements, so the drawing origin is not
+	    scaled.
+	    
+	    Scale is expressed as a percentage (with 1.0 being no scaling and 2.0
+	    being double size)
+	    
+	    Default scale is 1.0 by 1.0.
+	*/
+	setScale: abstract func (scale: NSize)
+	
+	/**
+	    Applies another scaling operating on top of the existing scale for
+	    incremental scaling.
+	*/
+	applyScale: func (scale: NSize) {
+	    setScale(scale * this scale())
+	}
+	
+	/**
+	    Returns the current drawing scale.
+	*/
+	scale: abstract func -> NSize
 }
