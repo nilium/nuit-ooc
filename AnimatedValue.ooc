@@ -18,11 +18,13 @@ NAnimatedValue: class {
     /** The target value of the animation. */
     _target: Double
     
-    init: func ~noStart (from_, target: Double, duration: ULLong) {
-        init(from_, target, duration, false)
+    init: func ~noStart (initial, target: Double, duration: ULLong) {
+        init(initial, target, duration, false)
     }
     
-    init: func (=_initial, _target, duration: ULLong, running: Bool) {
+    init: func (initial, target: Double, duration: ULLong, running: Bool) {
+        setInitial(initial)
+        setTarget(target)
         setDuration(duration)
         if (running) start()
     }
