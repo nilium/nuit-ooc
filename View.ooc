@@ -659,11 +659,10 @@ NView: class {
     }
     
     /**
-        Draws all of a view's subviews.
-        
-        Internal use only.
+        Sets up the renderer for drawing this view's subviews.  Should be
+        called any time subviews will be drawn.
     */
-    drawSubviews: func (renderer: NRenderer) {
+    _prepSubviewsDrawing: func (renderer: NRenderer) {
         renderer translateDrawingOrigin(bounds() origin)
         
         if (clipsSubviews()) {
@@ -673,6 +672,16 @@ NView: class {
             renderer enableClipping()
             renderer clipRegion(clip)
         }
+    }
+    
+    /**
+        Draws all of a view's subviews.
+        
+        Can be overridden to control subview drawing, apply renderer changes to
+        subviews, etc.
+    */
+    drawSubviews: func (renderer: NRenderer) {
+        _prepSubviewsDrawing(renderer)
         
         for (subview in subviews)
             drawSubview(renderer, subview)
@@ -695,7 +704,7 @@ NView: class {
         
         if (subview clipsSubviews()) {
             clip := subview bounds()
-            clip origin = subview convertPointToScreen(clip origin)
+            clip origin += renderer drawingOrigin()
             renderer enableClipping()
             renderer clipRegion(clip)
         }
@@ -709,7 +718,6 @@ NView: class {
         Clips rendering to a subview's frame
     */
     _clipSubview: func (subview: NView, renderer: NRenderer) {
-        origin := subview convertPointToScreen(NPoint zero())
         renderer translateDrawingOrigin(subview origin())
         
         if (subview clipsSubviews()) {
