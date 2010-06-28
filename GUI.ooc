@@ -109,7 +109,6 @@ NGUI: class {
         } else {
             set := false
             view: NView = null
-            point: NPoint
             
             if (_popup) {
                 if (!_popup hidden?(false))
