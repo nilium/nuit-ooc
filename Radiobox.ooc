@@ -1,4 +1,4 @@
-import Types, GUI, View, Checkbox, Renderer
+import Types, GUI, View, Checkbox, Renderer, Drawable
 
 NRadiobox: class extends NCheckbox {
 	
