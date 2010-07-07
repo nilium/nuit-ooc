@@ -4,23 +4,37 @@ import Image
 import Renderer
 
 NImageScaling: enum {
-    none = 0             /** Causes the image to be drawn without scaling and will be clipped to the drawing rectangle */
-    fillWidth = 1        /** Causes the image to be drawn such that it will be stretched to fill the entire width of the drawing rectangle */
-    fillHeight = 2       /** Causes the image to be drawn such that it will be stretched to fill the entire height of the drawing rectangle */
-    fill = 3             /** Causes the image to be drawn such that it will be stretched to fill the drawing rectangle */
-    fillAspect = 4       /** Causes the image to be scaled such that it will be stretched to fill the drawing rectangle while maintaining its aspect ratio. */
+    /** Causes the image to be drawn without scaling and will be clipped to the drawing rectangle */
+    none = 0
+    /** Causes the image to be drawn such that it will be stretched to fill the entire width of the drawing rectangle */
+    fillWidth = 1
+    /** Causes the image to be drawn such that it will be stretched to fill the entire height of the drawing rectangle */
+    fillHeight = 2
+    /** Causes the image to be drawn such that it will be stretched to fill the drawing rectangle */
+    fill = 3
+    /** Causes the image to be scaled such that it will be stretched to fill the drawing rectangle while maintaining its aspect ratio. */
+    fillAspect = 4
 }
 
 NImageAlignment: enum {
-    topLeft = 0              /** Image is aligned to the top-left corner of the drawing rect */
-    top = 1                  /** Image is aligned to the top-center edge of the drawing rect */
-    topRight = 2             /** Image is aligned to the top-right corner of the drawing rect */
-    left = 3                 /** Image is aligned to the mid-left of the drawing rect */
-    center = 4               /** Image is aligned to the middle of the drawing rect */
-    right = 5                /** Image is aligned to the mid-right of the drawing rect */
-    bottomLeft = 6           /** Image is aligned to the bottom-left corner of the drawing rect */
-    bottom = 7               /** Image is aligned to the bottom-center edge of the drawing rect */
-    bottomRight = 8          /** Image is aligned to the bottom-right corner of the drawing rect */
+    /** Image is aligned to the top-left corner of the drawing rect */
+    topLeft = 0
+    /** Image is aligned to the top-center edge of the drawing rect */
+    top = 1
+    /** Image is aligned to the top-right corner of the drawing rect */
+    topRight = 2
+    /** Image is aligned to the mid-left of the drawing rect */
+    left = 3
+    /** Image is aligned to the middle of the drawing rect */
+    center = 4
+    /** Image is aligned to the mid-right of the drawing rect */
+    right = 5
+    /** Image is aligned to the bottom-left corner of the drawing rect */
+    bottomLeft = 6
+    /** Image is aligned to the bottom-center edge of the drawing rect */
+    bottom = 7
+    /** Image is aligned to the bottom-right corner of the drawing rect */
+    bottomRight = 8
 }
 
 NImageDrawable: class extends NDrawable {

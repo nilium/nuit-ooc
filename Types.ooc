@@ -1,5 +1,11 @@
 include math
 
+/**
+    Cover of an existing type.  Must be floating point, does not specify or
+    require a given precision.
+    
+    Defaults to the 32bit Float.
+*/
 NFloat: cover from float extends Float {
 	
 	/* these are here because I typically don't trust the SDK very much at all */

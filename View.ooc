@@ -85,7 +85,7 @@ NView: class {
     /** The bottom-right corner of the view's bounds */
     _bounds_bottomRight: NSize
 
-//////// Initializers
+/* Initializers */
     
     /** Initializes the view its GUI instance and a frame */
     init: func (=_gui, frame: NRect) {
@@ -104,7 +104,7 @@ NView: class {
     */
     _loadDefaultDrawables: func {}
     
-//////// Basic properties
+/* Basic properties */
 
     /** Get the name of the view */
     name: func -> String { _name clone() }
@@ -279,7 +279,7 @@ NView: class {
     */
     enable: final func { setDisabled(false) }
     
-//////// Layout
+/* Layout */
 
     /**
         Performs layout on subviews where necessary.
@@ -349,7 +349,7 @@ NView: class {
     clipsSubviews: func -> Bool { true }
 
 
-//////// View hierarchy
+/* View hierarchy */
 
     /**
         Find a subview with the given name.  Passing `true` to :param:`recurse`
@@ -501,7 +501,7 @@ NView: class {
         return null
     }
 
-//////// Working with view coordinates
+/* Working with view coordinates */
     
     /**
         Converts a :param:`point` from a given :param:`view`'s coordinate
@@ -602,7 +602,7 @@ NView: class {
         return null
     }
 
-//////// Drawing routines
+/* Drawing routines */
 
     /**
         Draws the view using the renderer provided.
@@ -726,7 +726,7 @@ NView: class {
         }
     }
 
-//////// Events & event handling
+/* Events & event handling */
     
     __pointToSuperview: final func (point: NPoint) -> NPoint {
         point add(frame() origin)
@@ -882,7 +882,7 @@ NView: class {
             handlers clear()
     }
     
-//////// Drawables/fonts
+/* Drawables/fonts */
     
     /**
         Returns the font to be used by the view.
