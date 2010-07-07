@@ -6,7 +6,7 @@ NScrollBarScrollEvent := "SBScrollEvent"
 // Event data
 NScrollBarPreviousValue := "SBPreviousValue" // previous value of the scrollbar => Cell<NFloat>
 
-NScrollBar: class extends NView {
+NScrollBar: abstract class extends NView {
 	_min = 0.0: NFloat
 	_max = 100.0: NFloat
 	_value = 0.0: NFloat
