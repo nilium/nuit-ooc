@@ -164,6 +164,58 @@ NMultiSkin: class extends NSkin {
         }
         return NRect zero()
     }
+    
+    boolForName: func (name: String) -> Bool {
+        for (skin: NSkin in __skins) {
+            if (skin == null || !skin hasBoolForName?(name))
+                continue
+            return skin boolForName(name)
+        }
+        return false
+    }
+    
+    hasNumberForName?: func (name: String) -> Bool {
+        for (skin: NSkin in __skins)
+            if (skin && skin hasNumberForName?(name))
+                return true
+        return false
+    }
+    
+    hasColorForName?: func (name: String) -> Bool {
+        for (skin: NSkin in __skins)
+            if (skin && skin hasColorForName?(name))
+                return true
+        return false
+    }
+    
+    hasPointForName?: func (name: String) -> Bool {
+        for (skin: NSkin in __skins)
+            if (skin && skin hasPointForName?(name))
+                return true
+        return false
+    }
+    
+    hasSizeForName?: func (name: String) -> Bool {
+        for (skin: NSkin in __skins)
+            if (skin && skin hasSizeForName?(name))
+                return true
+        return false
+    }
+    
+    hasRectForName?: func (name: String) -> Bool {
+        for (skin: NSkin in __skins)
+            if (skin && skin hasRectForName?(name))
+                return true
+        return false
+    }
+    
+    hasBoolForName?: func (name: String) -> Bool {
+        for (skin: NSkin in __skins)
+            if (skin && skin hasBoolForName?(name))
+                return true
+        return false
+    }
+    
 }
 
 NBasicSkin: class extends NSkin {
